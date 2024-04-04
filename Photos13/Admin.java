@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.io.*;
 
 public class Admin {
-    private static ArrayList<User> UserList = new ArrayList<>();
+    public static ArrayList<User> UserList = new ArrayList<>();
     public static final String storeDir = "src/photos13/data";
     public static final String storeFile = "UserLists.tt2";
     static final long serialVersionID = 1L;
