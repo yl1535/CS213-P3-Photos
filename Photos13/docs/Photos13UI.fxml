@@ -10,24 +10,44 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="photos13.Photos13UIController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Photos13.Photos13UIController">
    <children>
-      <ImageView fitHeight="400.0" fitWidth="610.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../data/Default-WaterLily.png" />
-         </image></ImageView>
-      <Text fill="#6459ffc2" layoutX="167.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Photos Manager 13">
-         <font>
-            <Font name="Times New Roman Bold Italic" size="33.0" />
-         </font>
-      </Text>
-      <Button fx:id="b1" layoutX="249.0" layoutY="293.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="102.0" text="Login" onAction="#convert" />
-      <TextField fx:id="tf1" layoutX="221.0" layoutY="188.0" promptText="- Type in your username -" />
-      <Pane fx:id="ErrorMessageWindow" layoutX="200.0" layoutY="144.0" prefHeight="111.0" prefWidth="200.0" visible="false">
+      <Pane fx:id="MainPage" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <ImageView fitHeight="400.0" fitWidth="610.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../data/Default-WaterLily.png" />
+               </image>
+            </ImageView>
+            <Text fill="#6459ffc2" layoutX="166.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Photos Manager 13">
+               <font>
+                  <Font name="Times New Roman Bold Italic" size="33.0" />
+               </font>
+            </Text>
+            <Button fx:id="b1" layoutX="249.0" layoutY="271.0" mnemonicParsing="false" onAction="#convert" prefHeight="37.0" prefWidth="102.0" text="Login" />
+            <TextField fx:id="tf1" layoutX="219.0" layoutY="189.0" promptText="- Type in your username -" />
+         </children>
+      </Pane>
+      <Pane fx:id="ErrorMessageWindow" disable="true" layoutX="200.0" layoutY="144.0" prefHeight="111.0" prefWidth="200.0" visible="false">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="106.0" layoutY="3.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
             <TextArea fx:id="ErrorMessageText" layoutX="23.0" layoutY="29.0" prefHeight="37.0" prefWidth="152.0" />
-            <Button fx:id="b2" layoutX="83.0" layoutY="74.0" mnemonicParsing="false" text="Ok" onAction="#convert" />
+            <Button fx:id="b2" layoutX="83.0" layoutY="74.0" mnemonicParsing="false" onAction="#convert" text="Ok" />
+         </children>
+      </Pane>
+      <Pane disable="true" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+            <Text layoutX="221.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, Admin">
+               <font>
+                  <Font name="Times New Roman Bold" size="23.0" />
+               </font>
+            </Text>
+            <TextField layoutX="216.0" layoutY="189.0" prefHeight="23.0" prefWidth="179.0" promptText="- Please type in Username -" />
+            <Button layoutX="221.0" layoutY="243.0" mnemonicParsing="false" onAction="#convert" text="Add User" />
+            <Button layoutX="312.0" layoutY="243.0" mnemonicParsing="false" onAction="#convert" text="Delete User" />
+            <Button layoutX="409.0" layoutY="189.0" mnemonicParsing="false" onAction="#convert" text="Print User List" />
+            <Button layoutX="513.0" layoutY="353.0" mnemonicParsing="false" onAction="#convert" text="Logout" />
          </children>
       </Pane>
    </children>

@@ -1,4 +1,4 @@
-package photos13;
+package Photos13;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +14,7 @@ public class Photos13 extends Application{
 		
         // create FXML loader
 	FXMLLoader loader = new FXMLLoader();
-	loader.setLocation(getClass().getResource("/photos13/docs/Photos13UI.fxml"));   //requires path change when doing final correction on file path
+	loader.setLocation(getClass().getResource("/Photos13/docs/Photos13UI.fxml"));   //requires path change when doing final correction on file path
 		
 	// load fmxl, root layout manager in fxml file is GridPane
 	Pane root = (Pane)loader.load();

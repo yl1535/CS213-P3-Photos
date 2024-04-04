@@ -1,11 +1,11 @@
-package photos13;
+package Photos13;
 
 import java.util.ArrayList;
 import java.io.*;
 
 public class Admin {
     public static ArrayList<User> UserList = new ArrayList<>();
-    public static final String storeDir = "src/photos13/data";
+    public static final String storeDir = "src/Photos13/data";
     public static final String storeFile = "UserLists.tt2";
     static final long serialVersionID = 1L;
     
@@ -45,9 +45,34 @@ public class Admin {
         oos.writeObject(al);
     }
     
-    public static ArrayList<User> readData(String storeDir, String storeFile) throws IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile));
-        ArrayList<User> users = (ArrayList<User>)ois.readObject();
+    public static ArrayList<User> readData(String storeDir, String storeFile){
+        ArrayList<User> users = new ArrayList<User>();
+        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile))){
+            users = (ArrayList<User>)ois.readObject();
+        } catch (EOFException e){
+            users.add(new User("admin"));
+            users.add(new User("stock"));
+            try{
+                writeData(storeDir,storeFile,users);
+            } catch (Exception e1){
+                e1.printStackTrace();
+            }
+        } catch (FileNotFoundException e){
+            users.add(new User("admin"));
+            users.add(new User("stock"));
+            try {
+                new FileOutputStream(storeDir + File.separator + storeFile).close();
+            } catch(IOException i){
+                i.printStackTrace();
+            }
+            try{
+                writeData(storeDir,storeFile,users);
+            } catch (Exception e1){
+                e1.printStackTrace();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return users;
     }
     

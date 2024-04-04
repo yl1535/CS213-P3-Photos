@@ -1,4 +1,4 @@
-package photos13;
+package Photos13;
 
 import java.io.Serializable;
 
