@@ -13,11 +13,11 @@ public class Admin {
         UserList = readData(storeDir,storeFile);
     }
     
-    public ArrayList<User> printList(){
+    public static ArrayList<User> printList(){
         return UserList;
     }
     
-    public boolean addUser(String name){
+    public static boolean addUser(String name){
         User user = new User(name);
         for(int i=0;i<UserList.size();i++){
             if(UserList.get(i).getName().equals(name)) return false;
@@ -26,7 +26,7 @@ public class Admin {
         return true;
     }
     
-    public boolean deleteUser(String name){
+    public static boolean deleteUser(String name){
         for(int i=0;i<UserList.size();i++){
             if(UserList.get(i).getName().equals(name)){
                 UserList.remove(i);
