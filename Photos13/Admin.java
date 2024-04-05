@@ -8,7 +8,7 @@ import java.io.*;
 */
 public class Admin {
     public static ArrayList<User> UserList = new ArrayList<>();
-    private static final String storeDir = "src/Photos13/data";
+    private static final String storeDir = "";  //src/Photos13/data
     private static final String storeFile = "UserLists.tt2";
     static final long serialVersionID = 1L;
     
