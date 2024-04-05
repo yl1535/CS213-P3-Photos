@@ -3,6 +3,9 @@ package Photos13;
 import java.util.ArrayList;
 import java.io.*;
 
+/*
+ * The Main Class for Operation methods, note that this is not for user-admin
+*/
 public class Admin {
     public static ArrayList<User> UserList = new ArrayList<>();
     private static final String storeDir = "src/Photos13/data";
@@ -76,7 +79,9 @@ public class Admin {
         return users;
     }
     
-    public static <T> String ConvertArrayListtoString(ArrayList<T> as){ //ArrayList<T> -> String: "String1\nString2\n...", for FXML TextArea
+    // A method for converting arraylist of objects into a total string with all tostring values of each element of the arraylist, separated by "\n", for FXML TextArea using
+    // ArrayList<T> -> String: "String1\nString2\n..."
+    public static <T> String ConvertArrayListtoString(ArrayList<T> as){
         String temp = "";
         T something = as.get(0);
         if(something instanceof String){
@@ -92,6 +97,15 @@ public class Admin {
             }
         }
         return temp;
+    }
+    
+    // The key method for dealing killing the application bypassing safely quit
+    public static void SafelyQuit(){
+        try{
+            writeUser();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
     
     /*public static void main(String[] args) throws Exception{      // Test only part, remove before final submission

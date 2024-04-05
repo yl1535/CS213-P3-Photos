@@ -16,7 +16,7 @@ public class Photos13 extends Application{
 	FXMLLoader loader = new FXMLLoader();
 	loader.setLocation(getClass().getResource("/Photos13/docs/Photos13UI.fxml"));   //requires path change when doing final correction on file path
 		
-	// load fmxl, root layout manager in fxml file is GridPane
+	// load fmxl, connect root
 	Pane root = (Pane)loader.load();
         
 	// set scene to root
@@ -24,6 +24,9 @@ public class Photos13 extends Application{
 	primaryStage.setScene(scene);
 	primaryStage.setResizable(false);
 	primaryStage.show();
+        
+        // set kill event
+        primaryStage.setOnCloseRequest(event -> Admin.SafelyQuit());
     }
     
     public static void main(String[] args) throws Exception{

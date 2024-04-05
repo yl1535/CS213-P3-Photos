@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class Photos13UIController {
     public static boolean ErrorWindowAppear = false;
@@ -17,6 +18,7 @@ public class Photos13UIController {
     
     @FXML Button b1;
     @FXML Button b2;
+    @FXML Button b3;
     @FXML Button adminb1;
     @FXML Button adminb2;
     @FXML Button adminb3;
@@ -35,7 +37,11 @@ public class Photos13UIController {
     
     public void convert(ActionEvent e) throws Exception{
         Button temp = (Button)e.getSource();
-        if(temp == b1){ //Login Button
+        if(temp == b3){ //Safely quit Button
+            Stage s = (Stage)temp.getScene().getWindow();
+            s.close();
+        }
+        else if(temp == b1){ //Login Button
             Current = MainPage;
             String inputname = tf1.getText();
             if(inputname.equals("admin")){
@@ -113,11 +119,11 @@ public class Photos13UIController {
             windowTransfer(null,UserListPage,Operations.NewWindow);
             UserList.setText(Admin.ConvertArrayListtoString(Admin.UserList));
         }
-        else if(temp == adminb4){
+        else if(temp == adminb4){   //AdminPage Logout Button
             windowTransfer(AdminPage,MainPage,Operations.NewScene);
             Admin.writeUser();
         }
-        else if(temp == adminb5){
+        else if(temp == adminb5){   //Window UsersList Close Button
             windowTransfer(UserListPage,null,Operations.CloseWindow);
         }
     }
