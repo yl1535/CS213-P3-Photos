@@ -7,7 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-public class Photos13 extends Application{
+public class Photos extends Application{
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -33,5 +33,7 @@ public class Photos13 extends Application{
         Admin.initializeList();
         launch(args);
     }
+    
+    //ToDo: Update GUI Bug Report
     
 }

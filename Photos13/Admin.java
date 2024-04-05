@@ -8,7 +8,7 @@ import java.io.*;
 */
 public class Admin {
     public static ArrayList<User> UserList = new ArrayList<>();
-    private static final String storeDir = "";  //src/Photos13/data
+    private static final String storeDir = "./";  //src/Photos13/data
     private static final String storeFile = "UserLists.tt2";
     static final long serialVersionID = 1L;
     
@@ -20,7 +20,7 @@ public class Admin {
         return UserList;
     }
     
-    public static boolean addUser(String name){
+    public static boolean addUser(String name){     //requires improvement while adding more features to user
         User user = new User(name);
         for(int i=0;i<UserList.size();i++){
             if(UserList.get(i).toString().equals(name)) return false;
@@ -39,7 +39,7 @@ public class Admin {
         return false;
     }
     
-    public static void writeUser() throws Exception{    // Not sure if doing so, etc. just updating list during admin's acitivation and update real save on disk leaving, is best
+    public static void writeUser() throws Exception{
         writeData(storeDir,storeFile,UserList);
     }
     

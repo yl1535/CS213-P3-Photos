@@ -3,8 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -14,11 +12,7 @@
    <children>
       <Pane fx:id="MainPage" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <ImageView fitHeight="400.0" fitWidth="610.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../data/Default-WaterLily.png" />
-               </image>
-            </ImageView>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
             <Text fill="#6459ffc2" layoutX="166.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Photos Manager 13">
                <font>
                   <Font name="Times New Roman Bold Italic" size="33.0" />

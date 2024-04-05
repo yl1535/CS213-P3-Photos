@@ -70,18 +70,12 @@ public class Photos13UIController {
         }
         else if(temp == adminb1){   //AdminPage Add Button
             String name = Admintf1.getText();
-            boolean repeat = false;
-            for(int i=0;i<Admin.UserList.size();i++){
-                if(Admin.UserList.get(i).toString().equals(name)){
-                    ErrorMessageText.setText("Error02:This User already exists");
-                    windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
-                    UserListPage.setDisable(true);
-                    repeat = true;
-                    break;
-                }
+            if(!Admin.addUser(name) || name.equals("")){    // Q, is a username with white spaces allowed?
+                ErrorMessageText.setText("Error02:This User already exists, or input is invalid.");
+                windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
+                UserListPage.setDisable(true);
             }
-            if(!repeat){
-                Admin.UserList.add(new User(name));
+            else{
                 UserList.setText(Admin.ConvertArrayListtoString(Admin.UserList));
                 UserListPage.setDisable(true);
                 ErrorMessageText.setText("User Add Success.");
@@ -96,19 +90,13 @@ public class Photos13UIController {
                 UserListPage.setDisable(true);
             }
             else{
-                boolean ifexist = false;
-                for(int i=0;i<Admin.UserList.size();i++){
-                    if(Admin.UserList.get(i).toString().equals(name)){
-                        Admin.UserList.remove(i);
-                        UserList.setText(Admin.ConvertArrayListtoString(Admin.UserList));
-                        UserListPage.setDisable(true);
-                        ErrorMessageText.setText("User Remove Success.");
-                        windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
-                        ifexist = true;
-                        break;
-                    }
+                if(Admin.deleteUser(name)){
+                    UserList.setText(Admin.ConvertArrayListtoString(Admin.UserList));
+                    UserListPage.setDisable(true);
+                    ErrorMessageText.setText("User Remove Success.");
+                    windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
                 }
-                if(!ifexist){
+                else{
                     ErrorMessageText.setText("Error04:Target User Not Found");
                     windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
                     UserListPage.setDisable(true);
