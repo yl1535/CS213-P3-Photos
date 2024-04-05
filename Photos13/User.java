@@ -9,7 +9,7 @@ public class User implements Serializable{
         name = myname;
     }
     
-    public String getName(){
+    public String toString(){
         return name;
     }
 }

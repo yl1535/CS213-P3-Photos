@@ -5,8 +5,8 @@ import java.io.*;
 
 public class Admin {
     public static ArrayList<User> UserList = new ArrayList<>();
-    public static final String storeDir = "src/Photos13/data";
-    public static final String storeFile = "UserLists.tt2";
+    private static final String storeDir = "src/Photos13/data";
+    private static final String storeFile = "UserLists.tt2";
     static final long serialVersionID = 1L;
     
     public static void initializeList() throws Exception{
@@ -20,7 +20,7 @@ public class Admin {
     public static boolean addUser(String name){
         User user = new User(name);
         for(int i=0;i<UserList.size();i++){
-            if(UserList.get(i).getName().equals(name)) return false;
+            if(UserList.get(i).toString().equals(name)) return false;
         }
         UserList.add(user);
         return true;
@@ -28,7 +28,7 @@ public class Admin {
     
     public static boolean deleteUser(String name){
         for(int i=0;i<UserList.size();i++){
-            if(UserList.get(i).getName().equals(name)){
+            if(UserList.get(i).toString().equals(name)){
                 UserList.remove(i);
                 return true;
             }
@@ -40,12 +40,12 @@ public class Admin {
         writeData(storeDir,storeFile,UserList);
     }
     
-    public static void writeData(String storeDir, String storeFile, ArrayList<User> al) throws IOException{
+    private static void writeData(String storeDir, String storeFile, ArrayList<User> al) throws IOException{
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
         oos.writeObject(al);
     }
     
-    public static ArrayList<User> readData(String storeDir, String storeFile){
+    private static ArrayList<User> readData(String storeDir, String storeFile){
         ArrayList<User> users = new ArrayList<User>();
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile))){
             users = (ArrayList<User>)ois.readObject();
@@ -74,6 +74,24 @@ public class Admin {
             e.printStackTrace();
         }
         return users;
+    }
+    
+    public static <T> String ConvertArrayListtoString(ArrayList<T> as){ //ArrayList<T> -> String: "String1\nString2\n...", for FXML TextArea
+        String temp = "";
+        T something = as.get(0);
+        if(something instanceof String){
+            for(int i=0;i<as.size();i++){
+                temp+=as.get(i);
+                temp+="\n";
+            }
+        }
+        else if(something instanceof User){
+            for(int i=0;i<as.size();i++){
+                temp+=as.get(i).toString();
+                temp+="\n";
+            }
+        }
+        return temp;
     }
     
     /*public static void main(String[] args) throws Exception{      // Test only part, remove before final submission
