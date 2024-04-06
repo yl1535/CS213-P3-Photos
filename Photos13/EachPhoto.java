@@ -2,8 +2,10 @@ package Photos13;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.Serializable;
 
-public class EachPhoto {
+public class EachPhoto implements Serializable{
+    static final long serialVersionID = 1L;
     private String PhotoPath;
     private String Caption;
     private ArrayList<Tags> tags;

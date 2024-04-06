@@ -1,8 +1,10 @@
 package Photos13;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Album {
+public class Album implements Serializable{
+    static final long serialVersionID = 1L;
     private ArrayList<EachPhoto> Contains;
     private String name;
     

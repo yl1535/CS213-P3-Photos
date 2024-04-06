@@ -1,6 +1,8 @@
 package Photos13;
 
-public class Tags {
+import java.io.Serializable;
+
+public class Tags implements Serializable{
     private String TagType;
     private String TagName;
     

@@ -7,10 +7,10 @@ import java.io.*;
  * The Main Class for Operation methods, note that this is not for user-admin
 */
 public class Admin {
+    static final long serialVersionID = 1L;
     public static ArrayList<User> UserList = new ArrayList<>();
     private static final String storeDir = "./";  //src/Photos13/data
     private static final String storeFile = "UserLists.tt2";
-    static final long serialVersionID = 1L;
     
     public static void initializeList() throws Exception{
         UserList = readData(storeDir,storeFile);
@@ -53,16 +53,14 @@ public class Admin {
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile))){
             users = (ArrayList<User>)ois.readObject();
         } catch (EOFException e){
-            users.add(new User("admin"));
-            users.add(new User("stock"));
+            initializeSaveFile(users);
             try{
                 writeData(storeDir,storeFile,users);
             } catch (Exception e1){
                 e1.printStackTrace();
             }
         } catch (FileNotFoundException e){
-            users.add(new User("admin"));
-            users.add(new User("stock"));
+            initializeSaveFile(users);
             try {
                 new FileOutputStream(storeDir + File.separator + storeFile).close();
             } catch(IOException i){
@@ -106,6 +104,18 @@ public class Admin {
         } catch(Exception e){
             e.printStackTrace();
         }
+    }
+    
+    // Initialize the savefile
+    private static void initializeSaveFile(ArrayList<User> users){
+        users.add(new User("admin"));
+        User stock = new User("stock");
+        ArrayList<Album> albums = new ArrayList<Album>();
+        
+        Album album = new Album(null, "stock"); //change null to pic
+        albums.add(album);
+        stock.setAlbums(albums);
+        users.add(stock);
     }
     
     /*public static void main(String[] args) throws Exception{      // Test only part, remove before final submission
