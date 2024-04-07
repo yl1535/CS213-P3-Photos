@@ -145,7 +145,6 @@ public class Photos13UIController {
             selectedCellindex = -1;
             selectedCell = null;
             setUAPButton(true);
-            AlbumGridPane.getChildren().clear();
             InitializeAlbumPage(LoggedUser);
         }
         else if(temp == UAPb3){     //Rename Selected Album
@@ -201,6 +200,7 @@ public class Photos13UIController {
     }
     
     public void InitializeAlbumPage(User u){
+        AlbumGridPane.getChildren().clear();
         LoggedUser = u;
         ArrayList<Album> albums = u.getAlbums();
         int Albumsize;
@@ -251,19 +251,18 @@ public class Photos13UIController {
         }
     }
     
-    /*  A universal method used to operate set functions after receiving input
-    *   1 -> Add new Album
-    *   2 -> Rename selected Album
-    */
+    /**  A universal method used to operate set functions after receiving input
+     *   1 -> Add new Album
+     *   2 -> Rename selected Album
+     */
     public void ReadInputOperations(){
         ArrayList<Album> albums;
         switch(waitedOperation){
             case 1:     // Q: can we have albums with the same name?
                 albums = LoggedUser.getAlbums();
-                Album a = new Album(null,ReadInput);
+                Album a = new Album(ReadInput);
                 albums.add(a);
                 LoggedUser.setAlbums(albums);
-                AlbumGridPane.getChildren().clear();
                 InitializeAlbumPage(LoggedUser);
                 break;
             case 2:
@@ -274,7 +273,6 @@ public class Photos13UIController {
                 selectedCellindex = -1;
                 selectedCell = null;
                 setUAPButton(true);
-                AlbumGridPane.getChildren().clear();
                 InitializeAlbumPage(LoggedUser);
                 break;
             case 3:

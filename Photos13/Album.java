@@ -13,6 +13,11 @@ public class Album implements Serializable{
         this.name = name;
     }
     
+    public Album(String name){
+        this.name = name;
+        Contains = new ArrayList<EachPhoto>();
+    }
+    
     public ArrayList<EachPhoto> getContains(){
         return Contains;
     }

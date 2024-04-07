@@ -10,6 +10,7 @@ public class User implements Serializable{
     
     public User(String myname){
         name = myname;
+        albums = new ArrayList<Album>();
     }
     
     public String toString(){

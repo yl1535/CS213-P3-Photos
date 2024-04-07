@@ -17,6 +17,12 @@ public class EachPhoto implements Serializable{
         this.tags = tags;
     }
     
+    public EachPhoto(String PhotoPath, String Caption){
+        this.PhotoPath = PhotoPath;
+        this.Caption = Caption;
+        tags = new ArrayList<Tags>();
+    }
+    
     public String getPath(){
         return PhotoPath;
     }
