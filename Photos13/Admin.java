@@ -111,8 +111,18 @@ public class Admin {
         users.add(new User("admin"));
         User stock = new User("stock");
         ArrayList<Album> albums = new ArrayList<Album>();
-        
-        Album album = new Album(null, "stock"); //change null to pic
+        ArrayList<EachPhoto> stockphotos = new ArrayList<EachPhoto>();
+        stockphotos.add(new EachPhoto("/Photos13/data/angry-cat-meme.gif","AngryCat"));    //TODO: Reconstruct datas of these stock pics, determine if initial captions needed, tags needed, and add dates
+        stockphotos.add(new EachPhoto("/Photos13/data/FCP.jpeg","FCP"));
+        stockphotos.add(new EachPhoto("/Photos13/data/huh_cat.jpeg","huh?"));
+        stockphotos.add(new EachPhoto("/Photos13/data/KNOWYOURMEME-sad-cat-crying-1120.jpeg","Sad"));
+        stockphotos.add(new EachPhoto("/Photos13/data/Melvin.jpeg","Melvin"));
+        stockphotos.get(0).setSize(223,420);    //TODO: Create a quick function, replace these datas
+        stockphotos.get(1).setSize(640,638);
+        stockphotos.get(2).setSize(1920,1080);
+        stockphotos.get(3).setSize(1280,731);
+        stockphotos.get(4).setSize(1185,1064);
+        Album album = new Album(stockphotos, "stock");
         albums.add(album);
         stock.setAlbums(albums);
         users.add(stock);

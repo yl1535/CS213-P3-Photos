@@ -4,8 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.stage.Stage;
 import java.util.ArrayList;
+import javafx.geometry.Pos;
 
 public class Photos13UIController {
     public static boolean ErrorWindowAppear = false;
@@ -31,16 +33,30 @@ public class Photos13UIController {
     @FXML Button UAPb3;
     @FXML Button UAPb4;
     @FXML Button UAPb5;
+    @FXML Button APb1;
+    @FXML Button APb2;
+    @FXML Button APb3;
+    @FXML Button APb4;
+    @FXML Button APb5;
+    @FXML Button APb6;
+    @FXML Button APb7;
+    @FXML Button APb8;
+    @FXML Button APb9;
+    @FXML Button APb10;
+    @FXML Button APb11;
     @FXML Pane MainPage;
     @FXML Pane ErrorMessageWindow;
     @FXML Pane AdminPage;
     @FXML Pane UserListPage;
     @FXML Pane UserAlbumPage;
     @FXML Pane ReadInputWindow;
+    @FXML Pane AlbumPhotoPage;
     @FXML GridPane AlbumGridPane;
+    @FXML GridPane AlbumPhotoGridPane;
     @FXML TextArea ErrorMessageText;
     @FXML TextArea UserList;
     @FXML TextArea ReadInputMessage;
+    @FXML TextArea AlbumName;
     @FXML TextField tf1;
     @FXML TextField Admintf1;
     @FXML TextField ReadInputText;
@@ -48,9 +64,12 @@ public class Photos13UIController {
     Pane Current;
     User LoggedUser;
     Pane selectedCell = null;
+    Pane selectedPhoto = null;
     String ReadInput;
+    Album CurrentAlbum;
     
     int selectedCellindex = -1; //A global variable for storing the current selected cell index
+    int selectedPhotoindex = -1; //A global variable for storing the current selected photo index, use to separate from cell index
     int waitedOperation = -1; //A global variable for storing the current action required to be proceed after receiving input
     
     public void convert(ActionEvent e) throws Exception{
@@ -153,7 +172,10 @@ public class Photos13UIController {
             windowTransfer(UserAlbumPage,ReadInputWindow,Operations.OpenError);
         }
         else if(temp == UAPb4){     //Open Selected Album
-            
+            CurrentAlbum = LoggedUser.getAlbums().get(selectedCellindex);
+            InitializeAlbumPhotoPage(CurrentAlbum);
+            windowTransfer(UserAlbumPage,AlbumPhotoPage,Operations.NewScene);
+            Current = AlbumPhotoPage;
         }
         else if(temp == UAPb5){     //Logout from User Page
             selectedCell = null;
@@ -168,6 +190,7 @@ public class Photos13UIController {
             windowTransfer(ReadInputWindow,Current,Operations.CloseError);
             ReadInputOperations();
         }
+        
     }
     
     public void windowTransfer(Pane p1, Pane p2, Operations o){
@@ -203,12 +226,12 @@ public class Photos13UIController {
         AlbumGridPane.getChildren().clear();
         LoggedUser = u;
         ArrayList<Album> albums = u.getAlbums();
-        int Albumsize;
-        if(albums != null) Albumsize = albums.size();
-        else Albumsize = 0;
+        int Albumsize= albums.size();
         AlbumGridPane.setPrefSize(542,96*Albumsize);
         for(int i=0;i<Albumsize;i++){
-            Label cellContent = new Label(albums.get(i).getName());
+            Label cellContent = new Label("\n\n\n   Album:"+albums.get(i).getName()+", contains "+albums.get(i).getContains().size()
+                    +" photos, filmed days: "+albums.get(i).getEarliest()+" - "+albums.get(i).getLatest());
+            cellContent.setAlignment(Pos.CENTER_LEFT);
             Pane cellContainer = new Pane(cellContent);
             cellContainer.setPrefSize(542,96);
             final int currentindex = i;
@@ -232,9 +255,52 @@ public class Photos13UIController {
         }
     }
     
+    public void InitializeAlbumPhotoPage(Album a){
+        AlbumPhotoGridPane.getChildren().clear();
+        CurrentAlbum = a;
+        AlbumName.setText("Album: "+a.getName());
+        int PhotoSize = a.getContains().size();
+        int Photoheight = (PhotoSize-1)/4 + 1;
+        AlbumPhotoGridPane.setPrefSize(480,160*Photoheight);
+        for(int i=0;i<PhotoSize;i++){
+            EachPhoto p = a.getContains().get(i);
+            Image image = new Image(p.getPath());
+            ImageView iv = new ImageView(image);
+            iv.setPreserveRatio(true);
+            if(p.getWidth() > p.getHeight()) iv.setFitWidth(100);
+            else iv.setFitHeight(100);
+            StackPane sp = new StackPane(iv);
+            sp.setPrefSize(120,120);
+            TextArea ta = new TextArea(p.getCaption());
+            ta.setStyle("-fx-background-color: white;");
+            ta.setPrefSize(120,40);
+            ta.setEditable(false);
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(sp,ta);
+            vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+            final int currentindex = i;
+            iv.setOnMouseClicked(event -> {
+                if(selectedPhotoindex == currentindex){
+                    selectedPhoto.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+                    selectedPhotoindex = -1;
+                    selectedPhoto = null;
+                    setAPButton(1);
+                }
+                else{
+                    if(selectedPhoto != null) selectedPhoto.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+                    vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
+                    selectedPhotoindex = currentindex;
+                    selectedPhoto = vbox;
+                    setAPButton(2);
+                }
+            });
+            AlbumPhotoGridPane.add(vbox,i%4,i/4);
+        }
+    }
+    
     /*  A method used to control the button availables in album page
-    *   true -> add available & others not
-    *   false -> add not available & others yes
+    *   true -> Add button becomes available, other buttons become not available
+    *   false -> Add button becomes not available, other buttons become available
     */
     public void setUAPButton(boolean mode){
         if(mode){
@@ -251,6 +317,52 @@ public class Photos13UIController {
         }
     }
     
+    /** A method used to control the button availables in photo page
+     *  1 -> Not selected mode, Add, Go Through and Search buttons become available, other buttons become not available
+     *  2 -> Selected mode, Add, Go Through and Search buttons become not available, other buttons become available
+     *  3 -> Special: Search mode, all buttons except Return become unavailable
+     */
+    public void setAPButton(int mode){
+        switch(mode){
+            case 1:
+                APb1.setDisable(false);
+                APb2.setDisable(true);
+                APb3.setDisable(true);
+                APb4.setDisable(true);
+                APb5.setDisable(true);
+                APb6.setDisable(true);
+                APb7.setDisable(true);
+                APb8.setDisable(true);
+                APb9.setDisable(false);
+                APb10.setDisable(false);
+                break;
+            case 2:
+                APb1.setDisable(true);
+                APb2.setDisable(false);
+                APb3.setDisable(false);
+                APb4.setDisable(false);
+                APb5.setDisable(false);
+                APb6.setDisable(false);
+                APb7.setDisable(false);
+                APb8.setDisable(false);
+                APb9.setDisable(true);
+                APb10.setDisable(true);
+                break;
+            case 3:
+                APb1.setDisable(true);
+                APb2.setDisable(true);
+                APb3.setDisable(true);
+                APb4.setDisable(true);
+                APb5.setDisable(true);
+                APb6.setDisable(true);
+                APb7.setDisable(true);
+                APb8.setDisable(true);
+                APb9.setDisable(true);
+                APb10.setDisable(true);
+                break;
+        }
+    }
+    
     /**  A universal method used to operate set functions after receiving input
      *   1 -> Add new Album
      *   2 -> Rename selected Album
@@ -258,12 +370,25 @@ public class Photos13UIController {
     public void ReadInputOperations(){
         ArrayList<Album> albums;
         switch(waitedOperation){
-            case 1:     // Q: can we have albums with the same name?
+            case 1:
+                boolean ifexist = false;
                 albums = LoggedUser.getAlbums();
-                Album a = new Album(ReadInput);
-                albums.add(a);
-                LoggedUser.setAlbums(albums);
-                InitializeAlbumPage(LoggedUser);
+                for(int i=0;i<albums.size();i++){
+                    if(albums.get(i).getName().equals(ReadInput)){
+                        ifexist = true;
+                        break;
+                    }
+                }
+                if(ifexist){
+                    ErrorMessageText.setText("Error05:Album with this name already exist");
+                    windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
+                }
+                else{
+                    Album a = new Album(ReadInput);
+                    albums.add(a);
+                    LoggedUser.setAlbums(albums);
+                    InitializeAlbumPage(LoggedUser);
+                }
                 break;
             case 2:
                 albums = LoggedUser.getAlbums();
@@ -278,6 +403,7 @@ public class Photos13UIController {
             case 3:
                 
         }
+        ReadInputText.setText("");
         ReadInput = "";
         waitedOperation = -1;
     }

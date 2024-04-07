@@ -66,6 +66,26 @@
             <Button fx:id="UAPb5" layoutX="531.0" layoutY="361.0" mnemonicParsing="false" onAction="#convert" text="Logout" />
          </children>
       </Pane>
+      <Pane fx:id="AlbumPhotoPage" disable="true" prefHeight="400.0" prefWidth="600.0" visible="false">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+            <ScrollPane prefHeight="400.0" prefWidth="495.0">
+                <content>
+                  <GridPane fx:id="AlbumPhotoGridPane" />
+               </content></ScrollPane>
+            <TextArea fx:id="AlbumName" layoutX="500.5" layoutY="14.0" prefHeight="37.0" prefWidth="95.0" />
+            <Button fx:id="APb1" layoutX="508.59765625" layoutY="62.0" mnemonicParsing="false" onAction="#convert" text="Add Photo" />
+            <Button fx:id="APb2" disable="true" layoutX="501.87988275" layoutY="92.0" mnemonicParsing="false" onAction="#convert" text="Delete Photo" />
+            <Button fx:id="APb3" disable="true" layoutX="516.99414055" layoutY="122.0" mnemonicParsing="false" onAction="#convert" text="Caption" />
+            <Button fx:id="APb4" disable="true" layoutX="518.63476555" layoutY="152.0" mnemonicParsing="false" onAction="#convert" text="Display" />
+            <Button fx:id="APb5" disable="true" layoutX="515.23339835" layoutY="182.0" mnemonicParsing="false" onAction="#convert" text="Add Tag" />
+            <Button fx:id="APb6" disable="true" layoutX="508.515625" layoutY="212.0" mnemonicParsing="false" onAction="#convert" text="Delete Tag" />
+            <Button fx:id="APb7" disable="true" layoutX="505.65917965" layoutY="242.0" mnemonicParsing="false" onAction="#convert" text="Copy Photo" />
+            <Button fx:id="APb8" disable="true" layoutX="504.26464835" layoutY="272.0" mnemonicParsing="false" onAction="#convert" text="Move Photo" />
+            <Button fx:id="APb9" layoutX="504.97949215" layoutY="302.0" mnemonicParsing="false" onAction="#convert" text="Go Through" />
+            <Button fx:id="APb10" layoutX="520.32226555" layoutY="332.0" mnemonicParsing="false" onAction="#convert" text="Search" />
+            <Button fx:id="APb11" layoutX="519.02148435" layoutY="362.0" mnemonicParsing="false" onAction="#convert" text="Return" />
+         </children></Pane>
       <Pane fx:id="ReadInputWindow" disable="true" layoutX="200.0" layoutY="113.0" prefHeight="142.0" prefWidth="200.0" visible="false">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="142.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />

@@ -33,4 +33,14 @@ public class Album implements Serializable{
     public void setName(String newName){
         name = newName;
     }
+    
+    public String getEarliest(){
+            //return the earliest filmed photo
+        return null;
+    }
+    
+    public String getLatest(){
+            //return the latest filmed photo
+        return null;
+    }
 }

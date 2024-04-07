@@ -9,6 +9,8 @@ public class EachPhoto implements Serializable{
     private String PhotoPath;
     private String Caption;
     private ArrayList<Tags> tags;
+    private int width;
+    private int height;
         //ToDO: Set Date of Photo by Calendar
     
     public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){   //ToDO: Add Date of Photo
@@ -47,5 +49,18 @@ public class EachPhoto implements Serializable{
         tags = newTags;
     }
     
+    public int getWidth(){
+        return width;
+    }
+    
+    public int getHeight(){
+        return height;
+    }
+    
+    public void setSize(int width, int height){
+        this.width = width;
+        this.height = height;
+    }
     //ToDO: Add Date of Photo operations
+
 }
