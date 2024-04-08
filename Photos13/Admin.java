@@ -154,4 +154,37 @@ public class Admin {
         return String.format("%04d-%02d-%02d %02d:%02d:%02d",c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1,c.get(Calendar.DAY_OF_MONTH),
                 c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),c.get(Calendar.SECOND));
     }
+    
+    public static Calendar ifTimeFormatCorrect(String input){
+        ArrayList<Integer> Formatted = new ArrayList<Integer>();
+        try{
+            String part = input.substring(0,4);
+            input = input.substring(4);
+            Formatted.add(Integer.parseInt(part));
+            for(int i=0;i<5;i++){
+                String slash = input.substring(0,1);
+                if(!slash.equals("/")) return null;
+                part = input.substring(1,3);
+                input = input.substring(3);
+                Formatted.add(Integer.parseInt(part));
+            }
+            if(!input.equals("")) return null;
+            return createCalendarDate(Formatted);
+        } catch(Exception e){
+            return null;
+        }
+    }
+    
+    public static Calendar createCalendarDate(ArrayList<Integer> Formatted){
+        Calendar c = Calendar.getInstance();
+        c.set(Formatted.get(0),Formatted.get(1),Formatted.get(2),Formatted.get(3),Formatted.get(4),Formatted.get(5));
+        c.set(Calendar.MILLISECOND,0);
+        return c;
+    }
+    
+    public static void UpdateToAll(EachPhoto p){
+        //TODO: Update the current photo's data to all copies
+            //TODO: search for all and find a place where "same pic" detection isn't correct, since using two different file path storings
+                //Should be addSome and deleteSome's sub to photos
+    }
 }

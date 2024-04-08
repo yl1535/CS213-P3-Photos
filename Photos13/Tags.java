@@ -30,4 +30,8 @@ public class Tags implements Serializable{
     public String toString(){
         return TagName + " " + TagValue;
     }
+    
+    public boolean equals(Tags tag){
+        return this.TagName.equals(tag.getTagName()) && this.TagValue.equals(tag.getTagValue());
+    }
 }

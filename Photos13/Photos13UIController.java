@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import javafx.geometry.Pos;
+import java.util.Calendar;
 
 public class Photos13UIController {
     private enum Operations{
@@ -48,6 +49,11 @@ public class Photos13UIController {
     @FXML Button TB1;
     @FXML Button TB2;
     @FXML Button TargetAlbumButton;
+    @FXML Button DIButton;
+    @FXML Button SPb1;
+    @FXML Button SPb2;
+    @FXML Button SPb3;
+    @FXML Button TIButton1;
     @FXML Pane MainPage;
     @FXML Pane ErrorMessageWindow;
     @FXML Pane AdminPage;
@@ -57,18 +63,27 @@ public class Photos13UIController {
     @FXML Pane AlbumPhotoPage;
     @FXML Pane TwoButtons;
     @FXML Pane TargetAlbumChooser;
+    @FXML Pane DateInputer;
+    @FXML Pane SearchResultPage;
+    @FXML Pane TagInputer1;
     @FXML GridPane AlbumGridPane;
     @FXML GridPane AlbumPhotoGridPane;
     @FXML GridPane GoThrough;
     @FXML GridPane TargetAlbumGridPane;
+    @FXML GridPane SearchResultGridPane;
     @FXML TextArea ErrorMessageText;
     @FXML TextArea UserList;
     @FXML TextArea ReadInputMessage;
     @FXML TextArea AlbumName;
     @FXML TextArea TBTA;
+    @FXML TextArea SearchType;
     @FXML TextField tf1;
     @FXML TextField Admintf1;
     @FXML TextField ReadInputText;
+    @FXML TextField DILeftTF;
+    @FXML TextField DIRightTF;
+    @FXML TextField TILeftTF1;
+    @FXML TextField TIRightTF1;
     
     Pane Current;   //A global Pane variable to store what the current background pane is, used for scene transferings
     User LoggedUser;    //A global User variable to store what the current logged user is
@@ -223,7 +238,7 @@ public class Photos13UIController {
             ReadInputMessage.setText("Type in the new Caption of this photo.");
             windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
         }
-        else if(temp == APb4){      //Display the Selected Photo
+        else if(temp == APb4 || temp == SPb2){      //Display the Selected Photo
             EachPhoto ep = CurrentAlbum.getContains().get(selectedPhotoindex);
             Image image = new Image(ep.getPath());
             ImageView imageView = new ImageView(image);
@@ -294,12 +309,12 @@ public class Photos13UIController {
             InitializeAlbumPage(LoggedUser);
         }
         else if(temp == TB1){       //TwoButton Page's Left Button
-            TwoButtonsOperation(true);
             windowTransfer(TwoButtons,AlbumPhotoPage,Operations.CloseError);
+            TwoButtonsOperation(true);
         }
         else if(temp == TB2){       //TwoButton Page's Right Button
-            TwoButtonsOperation(false);
             windowTransfer(TwoButtons,AlbumPhotoPage,Operations.CloseError);
+            TwoButtonsOperation(false);
         }
         else if(temp == TargetAlbumButton){     //TargetAlbumChooser Page's Ok Button
             windowTransfer(TargetAlbumChooser,AlbumPhotoPage,Operations.CloseError);
@@ -313,8 +328,81 @@ public class Photos13UIController {
             InitializeAlbumPhotoPage(CurrentAlbum);
         }
         else if(temp == UAPb6){     //Activates Search Mode
-            
+            twoButtonsOperation = 2;
+            TBTA.setText("On which mode do you prefer to search by?");
+            TB1.setText("Date");
+            TB2.setText("Tags");
+            windowTransfer(UserAlbumPage,TwoButtons,Operations.OpenError);
         }
+        else if(temp == DIButton){
+            windowTransfer(DateInputer,UserAlbumPage,Operations.CloseError);
+            Calendar FirstDate = Admin.ifTimeFormatCorrect(DILeftTF.getText());
+            Calendar SecondDate = Admin.ifTimeFormatCorrect(DIRightTF.getText());
+            if(FirstDate == null || SecondDate == null){
+                ErrorMessageText.setText("Error10:One or both or your inputs is not in correct format, follow the format in prompted text, including right slashes");
+                windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
+            }
+            else if(FirstDate.after(SecondDate)){
+                ErrorMessageText.setText("Error11:The first date you provided is later than the second one");
+                windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
+            }
+            else{
+                Album album = new Album("Search Type: "+DILeftTF.getText()+" - "+DIRightTF.getText());
+                ArrayList<EachPhoto> eachphotos = new ArrayList<EachPhoto>();
+                for(int i=0;i<LoggedUser.getAlbums().size();i++){
+                    Album a = LoggedUser.getAlbums().get(i);
+                    for(int j=0;j<a.getContains().size();j++){
+                        EachPhoto ep = a.getContains().get(j);
+                        if(ep.getDate().after(FirstDate) && ep.getDate().before(SecondDate)) Admin.addSome(eachphotos,ep);
+                    }
+                }
+                album.setContains(eachphotos);
+                InitializeSearchResultPage(album);
+                windowTransfer(UserAlbumPage,SearchResultPage,Operations.NewScene);
+                Current = SearchResultPage;
+            }
+           DILeftTF.setText("");
+           DIRightTF.setText("");
+        }
+        else if(temp == SPb1){
+            waitedOperation = 9;
+            ReadInputMessage.setText("Type in the Name of the New Album you want to Copy the Search Results to");
+            windowTransfer(SearchResultPage,ReadInputWindow,Operations.OpenError);
+        }
+        else if(temp == SPb3){
+            selectedPhoto = null;
+            selectedPhotoindex = -1;
+            selectedCell = null;
+            selectedCellindex = -1;
+            setUAPButton(true);
+            setSearchButton(true);
+            Current = UserAlbumPage;
+            windowTransfer(SearchResultPage,UserAlbumPage,Operations.NewScene);
+            InitializeAlbumPage(LoggedUser);
+            Admin.writeUser();
+        }
+        else if(temp == TIButton1){
+            windowTransfer(TagInputer1,UserAlbumPage,Operations.CloseError);
+            Tags tag = new Tags(TILeftTF1.getText(),TIRightTF1.getText());
+            Album album = new Album("Search Type: "+TILeftTF1.getText()+":"+TIRightTF1.getText());
+            ArrayList<EachPhoto> eachphotos = new ArrayList<EachPhoto>();
+            for(int i=0;i<LoggedUser.getAlbums().size();i++){
+                Album a = LoggedUser.getAlbums().get(i);
+                for(int j=0;j<a.getContains().size();j++){
+                    EachPhoto ep = a.getContains().get(j);
+                    for(int k=0;k<ep.getTags().size();k++){
+                        if(ep.getTags().get(k).equals(tag)) Admin.addSome(eachphotos,ep);
+                    }
+                }
+            }
+            album.setContains(eachphotos);
+            InitializeSearchResultPage(album);
+            windowTransfer(UserAlbumPage,SearchResultPage,Operations.NewScene);
+            Current = SearchResultPage;
+            TILeftTF1.setText("");
+            TIRightTF1.setText("");
+        }
+        
     }
     
     public void windowTransfer(Pane p1, Pane p2, Operations o){
@@ -403,6 +491,49 @@ public class Photos13UIController {
                 }
             });
             AlbumPhotoGridPane.add(vbox,i%4,i/4);
+        }
+    }
+    
+    public void InitializeSearchResultPage(Album a){
+        SearchResultGridPane.getChildren().clear();
+        CurrentAlbum = a;
+        SearchType.setText(a.getName());
+        int PhotoSize = a.getContains().size();
+        int Photoheight = (PhotoSize-1)/4 + 1;
+        SearchResultGridPane.setPrefSize(480,160*Photoheight);
+        for(int i=0;i<PhotoSize;i++){
+            EachPhoto p = a.getContains().get(i);
+            Image image = new Image(p.getPath());
+            ImageView iv = new ImageView(image);
+            iv.setPreserveRatio(true);
+            iv.setFitWidth(100);
+            iv.setFitHeight(100);
+            StackPane sp = new StackPane(iv);
+            sp.setPrefSize(120,120);
+            TextArea ta = new TextArea(p.getCaption());
+            ta.setStyle("-fx-background-color: white;");
+            ta.setPrefSize(120,40);
+            ta.setEditable(false);
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(sp,ta);
+            vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+            final int currentindex = i;
+            vbox.setOnMouseClicked(event -> {
+                if(selectedPhotoindex == currentindex){
+                    selectedPhoto.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+                    selectedPhotoindex = -1;
+                    selectedPhoto = null;
+                    setSearchButton(true);
+                }
+                else{
+                    if(selectedPhoto != null) selectedPhoto.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+                    vbox.setStyle("-fx-border-color: red; -fx-border-width: 1; -fx-background-color: lightgray;");
+                    selectedPhotoindex = currentindex;
+                    selectedPhoto = vbox;
+                    setSearchButton(false);
+                }
+            });
+            SearchResultGridPane.add(vbox,i%4,i/4);
         }
     }
     
@@ -499,6 +630,12 @@ public class Photos13UIController {
         }
     }
     
+    public void setSearchButton(boolean mode){
+        SPb1.setDisable(!mode);
+        SPb2.setDisable(mode);
+        SPb3.setDisable(!mode);
+    }
+    
     /**  A universal method used to operate set functions after receiving input
      *   1 -> Add new Album
      *   2 -> Rename selected Album
@@ -506,6 +643,9 @@ public class Photos13UIController {
      *   4 -> Caption/Recaption selected Photo
      *   5 -> Transition to operation 6
      *   6 -> Add new tag(TagType, TagName) to selected Photo
+     *   7 -> Transition to operation 8
+     *   8 -> Delete specific tag(TagType, TagName) from selected Photo
+     *   9 -> Create new Album for search results
      */
     public void ReadInputOperations(){
         ArrayList<Album> albums;
@@ -543,6 +683,7 @@ public class Photos13UIController {
                 EachPhoto ep4 = eachphotos4.get(selectedPhotoindex);
                 ep4.setCaption(ReadInput.get(0));
                 CurrentAlbum.setContains(eachphotos4);
+                Admin.UpdateToAll(ep4);
                 selectedPhotoindex = -1;
                 selectedPhoto = null;
                 setAPButton(1);
@@ -565,6 +706,7 @@ public class Photos13UIController {
                     ep6.setTags(tags6);
                     CurrentAlbum.setContains(eachphotos6);
                     ErrorMessageText.setText("New Tag has been successfully added to the selected photo.");
+                    Admin.UpdateToAll(ep6);
                 }
                 else ErrorMessageText.setText("Error05:Specified Tag has already been added to the selected Photo.");
                 selectedPhotoindex = -1;
@@ -600,6 +742,18 @@ public class Photos13UIController {
                 waitedOperation = -1;
                 break;
             case 9:
+                Album a9 = new Album(ReadInput.get(0));
+                a9.setContains(CurrentAlbum.getContains());
+                ArrayList<Album> albums9 = LoggedUser.getAlbums();
+                if(Admin.addSome(albums9,a9)){
+                    LoggedUser.setAlbums(albums9);
+                    ErrorMessageText.setText("New Album has been successfully added.");
+                }
+                else ErrorMessageText.setText("Error05:Album with this name already exist");
+                ReadInput.remove(0);
+                waitedOperation = -1;
+                break;
+            case 10:
                 
         }
         ReadInputText.setText("");
@@ -634,7 +788,8 @@ public class Photos13UIController {
     
     /** A universal method used to operate set functions after closing the TwoButton window
      *  1 -> Initialize GoThrough window with direction
-     *  
+     *  2 -> Search by Date or Search by Tags
+     *  3 -> Search by Single Tag or Search by Two Tags
      */
     public void TwoButtonsOperation(boolean leftbutton){
         switch(twoButtonsOperation){
@@ -668,7 +823,27 @@ public class Photos13UIController {
                 GoThrough.requestFocus();
                 break;
             case 2:
-                
+                if(leftbutton){
+                    windowTransfer(TwoButtons,UserAlbumPage,Operations.CloseError);
+                    windowTransfer(UserAlbumPage,DateInputer,Operations.OpenError);
+                }
+                else{
+                    twoButtonsOperation = 3;
+                    TBTA.setText("How many tags do you prefer to search by?");
+                    TB1.setText("One Pair");
+                    TB2.setText("Two Pairs");
+                    windowTransfer(UserAlbumPage,TwoButtons,Operations.OpenError);
+                }
+                break;
+            case 3:
+                if(leftbutton){
+                    windowTransfer(TwoButtons,UserAlbumPage,Operations.CloseError);
+                    windowTransfer(UserAlbumPage,TagInputer1,Operations.OpenError);
+                }
+                else{
+                    
+                }
+                break;
         }
     }
     
