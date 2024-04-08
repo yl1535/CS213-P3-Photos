@@ -43,4 +43,8 @@ public class Album implements Serializable{
             //return the latest filmed photo
         return null;
     }
+    
+    public String toString(){
+        return name;
+    }
 }

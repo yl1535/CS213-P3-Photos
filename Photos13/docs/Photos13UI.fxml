@@ -73,7 +73,7 @@
                 <content>
                   <GridPane fx:id="AlbumPhotoGridPane" />
                </content></ScrollPane>
-            <TextArea fx:id="AlbumName" layoutX="500.5" layoutY="14.0" prefHeight="37.0" prefWidth="95.0" />
+            <TextArea fx:id="AlbumName" editable="false" layoutX="500.5" layoutY="14.0" prefHeight="37.0" prefWidth="95.0" />
             <Button fx:id="APb1" layoutX="508.59765625" layoutY="62.0" mnemonicParsing="false" onAction="#convert" text="Add Photo" />
             <Button fx:id="APb2" disable="true" layoutX="501.87988275" layoutY="92.0" mnemonicParsing="false" onAction="#convert" text="Delete Photo" />
             <Button fx:id="APb3" disable="true" layoutX="516.99414055" layoutY="122.0" mnemonicParsing="false" onAction="#convert" text="Caption" />
@@ -101,7 +101,7 @@
       <Pane fx:id="ErrorMessageWindow" disable="true" layoutX="200.0" layoutY="144.0" prefHeight="111.0" prefWidth="200.0" visible="false">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="106.0" layoutY="3.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-            <TextArea fx:id="ErrorMessageText" layoutX="23.0" layoutY="29.0" prefHeight="37.0" prefWidth="152.0" />
+            <TextArea fx:id="ErrorMessageText" editable="false" layoutX="23.0" layoutY="29.0" prefHeight="37.0" prefWidth="152.0" />
             <Button fx:id="b2" layoutX="83.0" layoutY="74.0" mnemonicParsing="false" onAction="#convert" text="Ok" />
          </children>
       </Pane>

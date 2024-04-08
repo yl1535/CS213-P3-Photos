@@ -3,20 +3,12 @@ package Photos13;
 import java.io.Serializable;
 
 public class Tags implements Serializable{
-    private String TagType;
     private String TagName;
+    private String TagValue;
     
-    public Tags(String TagType, String TagName){
-        this.TagType = TagType;
+    public Tags(String TagName, String TagValue){
         this.TagName = TagName;
-    }
-    
-    public String getTagType(){
-        return TagType;
-    }
-    
-    public void setTagType(String newType){
-        TagType = newType;
+        this.TagValue = TagValue;
     }
     
     public String getTagName(){
@@ -25,5 +17,17 @@ public class Tags implements Serializable{
     
     public void setTagName(String newName){
         TagName = newName;
+    }
+    
+    public String getTagValue(){
+        return TagValue;
+    }
+    
+    public void setTagValue(String newValue){
+        TagValue = newValue;
+    }
+    
+    public String toString(){
+        return TagName + " " + TagValue;
     }
 }

@@ -20,19 +20,24 @@ public class Admin {
         return UserList;
     }
     
-    public static boolean addUser(String name){     //requires improvement while adding more features to user
-        User user = new User(name);
-        for(int i=0;i<UserList.size();i++){
-            if(UserList.get(i).toString().equals(name)) return false;
+    /** A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
+     *  If exist, then return false to this process, else add this T variable to the TargetList and return true
+     */
+    public static <T> boolean addSome(ArrayList<T> TargetList, T some){
+        for(int i=0;i<TargetList.size();i++){
+            if(TargetList.get(i).toString().equals(some.toString())) return false;
         }
-        UserList.add(user);
+        TargetList.add(some);
         return true;
     }
     
-    public static boolean deleteUser(String name){
-        for(int i=0;i<UserList.size();i++){
-            if(UserList.get(i).toString().equals(name)){
-                UserList.remove(i);
+    /** A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
+     *  If exist, then remove the specified T variable from the TargetList and return true, else return false
+     */
+    public static <T> boolean deleteSome(ArrayList<T> TargetList, T some){
+        for(int i=0;i<TargetList.size();i++){
+            if(TargetList.get(i).toString().equals(some.toString())){
+                TargetList.remove(i);
                 return true;
             }
         }

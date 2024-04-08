@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import javafx.geometry.Pos;
 
 public class Photos13UIController {
-    public static boolean ErrorWindowAppear = false;
     private enum Operations{
         NewWindow,  //Open a new window, while the user can operate on both the current page and the new window
         CloseWindow,
@@ -61,12 +60,12 @@ public class Photos13UIController {
     @FXML TextField Admintf1;
     @FXML TextField ReadInputText;
     
-    Pane Current;
-    User LoggedUser;
-    Pane selectedCell = null;
-    Pane selectedPhoto = null;
-    String ReadInput;
-    Album CurrentAlbum;
+    Pane Current;   //A global Pane variable to store what the current background pane is, used for scene transferings
+    User LoggedUser;    //A global User variable to store what the current logged user is
+    Pane selectedCell = null;   //A global Pane varaible used in User-Album Page, to store which pane is selected
+    Pane selectedPhoto = null;  //A global Pane variable used in Album-Photo Page, to store which pane is selected
+    ArrayList<String> ReadInput = new ArrayList<String>(); //A global String ArrayList to store inputs from GUI to manage operations
+    Album CurrentAlbum; //A global Album variable to store what the current opened album is
     
     int selectedCellindex = -1; //A global variable for storing the current selected cell index
     int selectedPhotoindex = -1; //A global variable for storing the current selected photo index, use to separate from cell index
@@ -108,15 +107,15 @@ public class Photos13UIController {
         }
         else if(temp == adminb1){   //AdminPage Add Button
             String name = Admintf1.getText();
-            if(!Admin.addUser(name) || name.equals("")){    // Q, is a username with white spaces allowed?
-                ErrorMessageText.setText("Error02:This User already exists, or input is invalid.");
+            if(!Admin.addSome(Admin.UserList,new User(name)) || name.equals("")){    // Q, is a username with white spaces allowed?  //need to figure if needed add more features to intialize user
+                ErrorMessageText.setText("Error02:This User already exists, or input is invalid");
                 windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
                 UserListPage.setDisable(true);
             }
             else{
                 UserList.setText(Admin.ConvertArrayListtoString(Admin.UserList));
                 UserListPage.setDisable(true);
-                ErrorMessageText.setText("User Add Success.");
+                ErrorMessageText.setText("The new user has been successfully added.");
                 windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
             }
         }
@@ -128,10 +127,10 @@ public class Photos13UIController {
                 UserListPage.setDisable(true);
             }
             else{
-                if(Admin.deleteUser(name)){
+                if(Admin.deleteSome(Admin.UserList,new User(name))){
                     UserList.setText(Admin.ConvertArrayListtoString(Admin.UserList));
                     UserListPage.setDisable(true);
-                    ErrorMessageText.setText("User Remove Success.");
+                    ErrorMessageText.setText("The specified user has been successfully removed.");
                     windowTransfer(AdminPage,ErrorMessageWindow,Operations.OpenError);
                 }
                 else{
@@ -154,7 +153,7 @@ public class Photos13UIController {
         }
         else if(temp == UAPb1){     //Create new Album
             waitedOperation = 1;
-            ReadInputMessage.setText("Type in the new album name");
+            ReadInputMessage.setText("Type in Name of the Album you want to create");
             windowTransfer(UserAlbumPage,ReadInputWindow,Operations.OpenError);
         }
         else if(temp == UAPb2){     //Delete Selected Album
@@ -165,10 +164,12 @@ public class Photos13UIController {
             selectedCell = null;
             setUAPButton(true);
             InitializeAlbumPage(LoggedUser);
+            ErrorMessageText.setText("Selected Album has been successfully removed.");
+            windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
         }
         else if(temp == UAPb3){     //Rename Selected Album
             waitedOperation = 2;
-            ReadInputMessage.setText("Type in the new album name");
+            ReadInputMessage.setText("Type in the New Name you want to give to the selected Album");
             windowTransfer(UserAlbumPage,ReadInputWindow,Operations.OpenError);
         }
         else if(temp == UAPb4){     //Open Selected Album
@@ -186,11 +187,66 @@ public class Photos13UIController {
             Admin.writeUser();
         }
         else if(temp == b4){        //Close ReadInput Window
-            ReadInput = ReadInputText.getText();
+            ReadInput.add(ReadInputText.getText());
             windowTransfer(ReadInputWindow,Current,Operations.CloseError);
             ReadInputOperations();
         }
-        
+        else if(temp == APb1){      //Add New Photo to Album
+            
+        }
+        else if(temp == APb2){      //Delete Selected Photo from Album
+            ArrayList<EachPhoto> eachphotos = CurrentAlbum.getContains();
+            eachphotos.remove(selectedPhotoindex);
+            CurrentAlbum.setContains(eachphotos);
+            selectedPhotoindex = -1;
+            selectedPhoto = null;
+            setAPButton(1);
+            InitializeAlbumPhotoPage(CurrentAlbum);
+            ErrorMessageText.setText("Selected Photo has been successfully removed from the album");
+            windowTransfer(AlbumPhotoPage,ErrorMessageWindow,Operations.OpenError);
+        }
+        else if(temp == APb3){      //Caption/Recaption the Selected Photo
+            waitedOperation = 4;
+            ReadInputMessage.setText("Type in the new Caption of this photo.");
+            windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
+        }
+        else if(temp == APb4){      //Display the Selected Photo
+            
+        }
+        else if(temp == APb5){      //Add Tag to the Selected Photo
+            waitedOperation = 5;
+            ReadInputMessage.setText("Type in the Tag Name you want to add.");
+            windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
+        }
+        else if(temp == APb6){      //Delete Tag to the Selected Photo
+            waitedOperation = 7;
+            ReadInputMessage.setText("Type in Name of the Tag you want to delete.");
+            windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
+        }
+        else if(temp == APb7){      //Copy the Selected Photo to another Album
+            
+        }
+        else if(temp == APb8){      //Move the Selected Photo to another Album
+            
+        }
+        else if(temp == APb9){      //Go Through the Album with Different Modes
+            
+        }
+        else if(temp == APb10){     //Execute Search Mode
+            
+        }
+        else if(temp == APb11){     //Return to the Album Page
+            selectedPhoto = null;
+            selectedPhotoindex = -1;
+            selectedCell = null;
+            selectedCellindex = -1;
+            setAPButton(1);
+            setUAPButton(true);
+            windowTransfer(AlbumPhotoPage,UserAlbumPage,Operations.NewScene);
+            Current = UserAlbumPage;
+            Admin.writeUser();
+            InitializeAlbumPage(LoggedUser);
+        }
     }
     
     public void windowTransfer(Pane p1, Pane p2, Operations o){
@@ -279,7 +335,7 @@ public class Photos13UIController {
             vbox.getChildren().addAll(sp,ta);
             vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
             final int currentindex = i;
-            iv.setOnMouseClicked(event -> {
+            vbox.setOnMouseClicked(event -> {
                 if(selectedPhotoindex == currentindex){
                     selectedPhoto.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
                     selectedPhotoindex = -1;
@@ -288,7 +344,7 @@ public class Photos13UIController {
                 }
                 else{
                     if(selectedPhoto != null) selectedPhoto.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
-                    vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
+                    vbox.setStyle("-fx-border-color: red; -fx-border-width: 1; -fx-background-color: lightgray;");
                     selectedPhotoindex = currentindex;
                     selectedPhoto = vbox;
                     setAPButton(2);
@@ -298,10 +354,10 @@ public class Photos13UIController {
         }
     }
     
-    /*  A method used to control the button availables in album page
-    *   true -> Add button becomes available, other buttons become not available
-    *   false -> Add button becomes not available, other buttons become available
-    */
+    /**  A method used to control the button availables in album page
+     *   true -> Add button becomes available, other buttons become not available
+     *   false -> Add button becomes not available, other buttons become available
+     */
     public void setUAPButton(boolean mode){
         if(mode){
             UAPb1.setDisable(false);
@@ -366,6 +422,10 @@ public class Photos13UIController {
     /**  A universal method used to operate set functions after receiving input
      *   1 -> Add new Album
      *   2 -> Rename selected Album
+     * 
+     *   4 -> Caption/Recaption selected Photo
+     *   5 -> Transition to operation 6
+     *   6 -> Add new tag(TagType, TagName) to selected Photo
      */
     public void ReadInputOperations(){
         ArrayList<Album> albums;
@@ -373,38 +433,116 @@ public class Photos13UIController {
             case 1:
                 boolean ifexist = false;
                 albums = LoggedUser.getAlbums();
-                for(int i=0;i<albums.size();i++){
-                    if(albums.get(i).getName().equals(ReadInput)){
-                        ifexist = true;
-                        break;
-                    }
-                }
-                if(ifexist){
-                    ErrorMessageText.setText("Error05:Album with this name already exist");
-                    windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
-                }
-                else{
-                    Album a = new Album(ReadInput);
-                    albums.add(a);
+                Album a = new Album(ReadInput.get(0));
+                if(Admin.addSome(albums,a)){
                     LoggedUser.setAlbums(albums);
                     InitializeAlbumPage(LoggedUser);
+                    ErrorMessageText.setText("New Album has been successfully added.");
                 }
+                else ErrorMessageText.setText("Error05:Album with this name already exist");
+                ReadInput.remove(0);
+                waitedOperation = -1;
                 break;
             case 2:
                 albums = LoggedUser.getAlbums();
                 Album b = albums.get(selectedCellindex);
-                b.setName(ReadInput);
+                b.setName(ReadInput.get(0));
                 LoggedUser.setAlbums(albums);
                 selectedCellindex = -1;
                 selectedCell = null;
                 setUAPButton(true);
                 InitializeAlbumPage(LoggedUser);
+                ReadInput.remove(0);
+                ErrorMessageText.setText("Selected Album has been successfully renamed.");
+                waitedOperation = -1;
                 break;
             case 3:
                 
+            case 4:
+                ArrayList<EachPhoto> eachphotos4 = CurrentAlbum.getContains();
+                EachPhoto ep4 = eachphotos4.get(selectedPhotoindex);
+                ep4.setCaption(ReadInput.get(0));
+                CurrentAlbum.setContains(eachphotos4);
+                selectedPhotoindex = -1;
+                selectedPhoto = null;
+                setAPButton(1);
+                InitializeAlbumPhotoPage(CurrentAlbum);
+                ReadInput.remove(0);
+                ErrorMessageText.setText("Selected Photo has successfully received a new caption.");
+                waitedOperation = -1;
+                break;
+            case 5:
+                waitedOperation = 6;
+                ReadInputMessage.setText("Type in the Tag Value you want to add.");
+                windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
+                break;
+            case 6:
+                ArrayList<EachPhoto> eachphotos6 = CurrentAlbum.getContains();
+                EachPhoto ep6 = eachphotos6.get(selectedPhotoindex);
+                ArrayList<Tags> tags6 = ep6.getTags();
+                Tags newTag = new Tags(ReadInput.get(0),ReadInput.get(1));
+                if(Admin.addSome(tags6,newTag)){
+                    ep6.setTags(tags6);
+                    CurrentAlbum.setContains(eachphotos6);
+                    ErrorMessageText.setText("New Tag has been successfully added to the selected photo.");
+                }
+                else ErrorMessageText.setText("Error05:Specified Tag has already been added to the selected Photo.");
+                selectedPhotoindex = -1;
+                selectedPhoto = null;
+                setAPButton(1);
+                InitializeAlbumPhotoPage(CurrentAlbum);
+                ReadInput.remove(1);
+                ReadInput.remove(0);
+                waitedOperation = -1;
+                break;
+            case 7:
+                waitedOperation = 8;
+                ReadInputMessage.setText("Type in the Value of the Tag you want to delete.");
+                windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
+                break;
+            case 8:
+                ArrayList<EachPhoto> eachphotos8 = CurrentAlbum.getContains();
+                EachPhoto ep8 = eachphotos8.get(selectedPhotoindex);
+                ArrayList<Tags> tags8 = ep8.getTags();
+                Tags t = new Tags(ReadInput.get(0),ReadInput.get(1));
+                if(Admin.deleteSome(tags8, t)){
+                    ep8.setTags(tags8);
+                    CurrentAlbum.setContains(eachphotos8);
+                    ErrorMessageText.setText("The specified Tag has been successfully removed from the selected photo.");
+                }
+                else ErrorMessageText.setText("Error06:Specified Tag Not Found.");
+                selectedPhotoindex = -1;
+                selectedPhoto = null;
+                setAPButton(1);
+                InitializeAlbumPhotoPage(CurrentAlbum);
+                ReadInput.remove(1);
+                ReadInput.remove(0);
+                waitedOperation = -1;
+                break;
+            case 9:
+                
         }
         ReadInputText.setText("");
-        ReadInput = "";
-        waitedOperation = -1;
+        if(waitedOperation == -1) windowTransfer(AlbumPhotoPage,ErrorMessageWindow,Operations.OpenError);
+    }
+    
+    /** A method called after a change to a photo's caption/tags has been made
+     *  The method goes through every album in each user and replace copies of Photos with same path with the provided Photo data
+     */
+    public void UpdatePhotoData(EachPhoto p){
+        for(int i=0;i<Admin.UserList.size();i++){
+            ArrayList<Album> albums = Admin.UserList.get(i).getAlbums();
+            for(int j=0;j<albums.size();j++){
+                ArrayList<EachPhoto> eachphotos = albums.get(j).getContains();
+                for(int k=0;k<eachphotos.size();k++){
+                    EachPhoto ep = eachphotos.get(k);
+                    if(ep.getPath() == p.getPath()){
+                        ep.setCaption(p.getCaption());
+                        ep.setTags(p.getTags());
+                            // TODO: Changes to time?
+                    }
+                }
+            }
+        }
     }
 }
