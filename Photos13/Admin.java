@@ -2,7 +2,10 @@ package Photos13;
 
 import java.util.ArrayList;
 import java.io.*;
-
+import java.util.Calendar;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 /*
  * The Main Class for Operation methods, note that this is not for user-admin
 */
@@ -117,26 +120,38 @@ public class Admin {
         User stock = new User("stock");
         ArrayList<Album> albums = new ArrayList<Album>();
         ArrayList<EachPhoto> stockphotos = new ArrayList<EachPhoto>();
-        stockphotos.add(new EachPhoto("/Photos13/data/angry-cat-meme.gif","AngryCat"));    //TODO: Reconstruct datas of these stock pics, determine if initial captions needed, tags needed, and add dates
-        stockphotos.add(new EachPhoto("/Photos13/data/FCP.jpeg","FCP"));
-        stockphotos.add(new EachPhoto("/Photos13/data/huh_cat.jpeg","huh?"));
-        stockphotos.add(new EachPhoto("/Photos13/data/KNOWYOURMEME-sad-cat-crying-1120.jpeg","Sad"));
-        stockphotos.add(new EachPhoto("/Photos13/data/Melvin.jpeg","Melvin"));
-        stockphotos.get(0).setSize(223,420);    //TODO: Create a quick function, replace these datas
-        stockphotos.get(1).setSize(640,638);
-        stockphotos.get(2).setSize(1920,1080);
-        stockphotos.get(3).setSize(1280,731);
-        stockphotos.get(4).setSize(1185,1064);
+        stockphotos.add(createNewPhoto("Photos13/data/angry-cat-meme.gif"));
+        stockphotos.add(createNewPhoto("Photos13/data/FCP.jpeg"));
+        stockphotos.add(createNewPhoto("Photos13/data/huh_cat.jpeg"));
+        stockphotos.add(createNewPhoto("Photos13/data/KNOWYOURMEME-sad-cat-crying-1120.jpeg"));
+        stockphotos.add(createNewPhoto("Photos13/data/Melvin.jpeg"));
         Album album = new Album(stockphotos, "stock");
         albums.add(album);
         stock.setAlbums(albums);
         users.add(stock);
     }
     
-    /*public static void main(String[] args) throws Exception{      // Test only part, remove before final submission
-        initializeList();
-        if(UserList.size() != 0) System.out.println(UserList.get(0).getName());
-        UserList.add(new User("Admin"));
-        writeUser();
-    }*/
+    public static EachPhoto createNewPhoto(String path){
+        EachPhoto eachphoto = new EachPhoto(path);
+        path = path.substring(9);
+        URL completepath = Admin.class.getResource(path);
+        try{
+            File file = new File(completepath.toURI());
+            long LastModifiedTime = file.lastModified();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(LastModifiedTime);
+            calendar.set(Calendar.MILLISECOND, 0);
+            eachphoto.setDate(calendar);
+            BufferedImage image = ImageIO.read(completepath);
+            eachphoto.setSize(image.getWidth(),image.getHeight());
+        } catch(Exception e){
+            e.printStackTrace();    //TODO: GUI BUG REPORT
+        }
+        return eachphoto;
+    }
+    
+    public static String ConvertCalendartoString(Calendar c){
+        return String.format("%04d-%02d-%02d %02d:%02d:%02d",c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1,c.get(Calendar.DAY_OF_MONTH),
+                c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),c.get(Calendar.SECOND));
+    }
 }

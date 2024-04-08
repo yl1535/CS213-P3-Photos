@@ -8,11 +8,10 @@ public class EachPhoto implements Serializable{
     static final long serialVersionID = 1L;
     private String PhotoPath;
     private String Caption;
-    private ArrayList<Tags> tags;
+    private ArrayList<Tags> tags = new ArrayList<Tags>();
     private int width;
     private int height;
-    private String Date;
-        //ToDO: Set Date of Photo by Calendar
+    private Calendar Date;
     
     public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){   //ToDO: Add Date of Photo
         this.PhotoPath = PhotoPath;
@@ -20,9 +19,9 @@ public class EachPhoto implements Serializable{
         this.tags = tags;
     }
     
-    public EachPhoto(String PhotoPath, String Caption){
+    public EachPhoto(String PhotoPath){
         this.PhotoPath = PhotoPath;
-        this.Caption = Caption;
+        this.Caption = "";
         tags = new ArrayList<Tags>();
     }
     
@@ -63,9 +62,12 @@ public class EachPhoto implements Serializable{
         this.height = height;
     }
     
-    public String getDate(){
+    public Calendar getDate(){
         return Date;
     }
-    //ToDO: Add Date of Photo operations
+    
+    public void setDate(Calendar c){
+        this.Date = c;
+    }
 
 }

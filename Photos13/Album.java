@@ -2,6 +2,7 @@ package Photos13;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Album implements Serializable{
     static final long serialVersionID = 1L;
@@ -35,13 +36,25 @@ public class Album implements Serializable{
     }
     
     public String getEarliest(){
-            //return the earliest filmed photo
-        return null;
+        if(Contains == null) return null;
+        else{
+            Calendar earliest = Contains.get(0).getDate();
+            for(int i=1;i<Contains.size();i++){
+                if(earliest.after(Contains.get(i).getDate())) earliest = Contains.get(i).getDate();
+            }
+            return Admin.ConvertCalendartoString(earliest);
+        }
     }
     
     public String getLatest(){
-            //return the latest filmed photo
-        return null;
+        if(Contains == null) return null;
+        else{
+            Calendar latest = Contains.get(0).getDate();
+            for(int i=1;i<Contains.size();i++){
+                if(latest.before(Contains.get(i).getDate())) latest = Contains.get(i).getDate();
+            }
+            return Admin.ConvertCalendartoString(latest);
+        }
     }
     
     public String toString(){

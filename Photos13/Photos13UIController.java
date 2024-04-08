@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.ArrayList;
-import javafx.event.EventType;
 import javafx.geometry.Pos;
 
 public class Photos13UIController {
@@ -231,7 +230,7 @@ public class Photos13UIController {
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(1004);
             imageView.setFitHeight(668);
-            String TextAreaWords = "Caption: "+ep.getCaption()+", Date: "+ep.getDate()+"\nTags: [";
+            String TextAreaWords = "Caption: "+ep.getCaption()+", Date: "+Admin.ConvertCalendartoString(ep.getDate())+"\nTags: [";
             for(int i=0;i<ep.getTags().size();i++){
                 Tags tag = ep.getTags().get(i);
                 TextAreaWords = TextAreaWords + tag.getTagName()+":"+tag.getTagValue()+";";
@@ -312,6 +311,9 @@ public class Photos13UIController {
             setAPButton(1);
             Admin.writeUser();
             InitializeAlbumPhotoPage(CurrentAlbum);
+        }
+        else if(temp == UAPb6){     //Activates Search Mode
+            
         }
     }
     
