@@ -5,8 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import java.util.ArrayList;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 
 public class Photos13UIController {
@@ -32,6 +35,7 @@ public class Photos13UIController {
     @FXML Button UAPb3;
     @FXML Button UAPb4;
     @FXML Button UAPb5;
+    @FXML Button UAPb6;
     @FXML Button APb1;
     @FXML Button APb2;
     @FXML Button APb3;
@@ -42,7 +46,9 @@ public class Photos13UIController {
     @FXML Button APb8;
     @FXML Button APb9;
     @FXML Button APb10;
-    @FXML Button APb11;
+    @FXML Button TB1;
+    @FXML Button TB2;
+    @FXML Button TargetAlbumButton;
     @FXML Pane MainPage;
     @FXML Pane ErrorMessageWindow;
     @FXML Pane AdminPage;
@@ -50,12 +56,17 @@ public class Photos13UIController {
     @FXML Pane UserAlbumPage;
     @FXML Pane ReadInputWindow;
     @FXML Pane AlbumPhotoPage;
+    @FXML Pane TwoButtons;
+    @FXML Pane TargetAlbumChooser;
     @FXML GridPane AlbumGridPane;
     @FXML GridPane AlbumPhotoGridPane;
+    @FXML GridPane GoThrough;
+    @FXML GridPane TargetAlbumGridPane;
     @FXML TextArea ErrorMessageText;
     @FXML TextArea UserList;
     @FXML TextArea ReadInputMessage;
     @FXML TextArea AlbumName;
+    @FXML TextArea TBTA;
     @FXML TextField tf1;
     @FXML TextField Admintf1;
     @FXML TextField ReadInputText;
@@ -70,6 +81,9 @@ public class Photos13UIController {
     int selectedCellindex = -1; //A global variable for storing the current selected cell index
     int selectedPhotoindex = -1; //A global variable for storing the current selected photo index, use to separate from cell index
     int waitedOperation = -1; //A global variable for storing the current action required to be proceed after receiving input
+    int twoButtonsOperation = -1; //A global variable for storing the current action required to be proceed after closing TwoButtons Window
+    int currentGoThroughindex = -1; //A global variable for storing the index of current GoThrough photo
+    boolean ifTACOperationisCopy = false; //A global variable for storing if the move photo process is copy
     
     public void convert(ActionEvent e) throws Exception{
         Button temp = (Button)e.getSource();
@@ -211,7 +225,35 @@ public class Photos13UIController {
             windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
         }
         else if(temp == APb4){      //Display the Selected Photo
-            
+            EachPhoto ep = CurrentAlbum.getContains().get(selectedPhotoindex);
+            Image image = new Image(ep.getPath());
+            ImageView imageView = new ImageView(image);
+            imageView.setPreserveRatio(true);
+            imageView.setFitWidth(1004);
+            imageView.setFitHeight(668);
+            String TextAreaWords = "Caption: "+ep.getCaption()+", Date: "+ep.getDate()+"\nTags: [";
+            for(int i=0;i<ep.getTags().size();i++){
+                Tags tag = ep.getTags().get(i);
+                TextAreaWords = TextAreaWords + tag.getTagName()+":"+tag.getTagValue()+";";
+            }
+            TextAreaWords += "]";
+            TextArea ta = new TextArea(TextAreaWords);
+            ta.setStyle("-fx-background-color: white;");
+            ta.setPrefSize(imageView.getFitWidth()+20,80);
+            ta.setEditable(false);
+            StackPane rootPane = new StackPane(imageView);
+            rootPane.setPrefSize(imageView.getFitWidth()+20,imageView.getFitHeight()+20);
+            rootPane.setStyle("-fx-background-color: white;");
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(rootPane,ta);
+            vbox.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+            Scene scene = new Scene(vbox,imageView.getFitWidth()+20,imageView.getFitHeight()+100);
+            Stage newWindow = new Stage();
+            newWindow.setTitle("Photo Display");
+            newWindow.setScene(scene);
+            newWindow.setWidth(imageView.getFitWidth()+20);
+            newWindow.setHeight(imageView.getFitHeight()+100);
+            newWindow.show();
         }
         else if(temp == APb5){      //Add Tag to the Selected Photo
             waitedOperation = 5;
@@ -224,18 +266,23 @@ public class Photos13UIController {
             windowTransfer(AlbumPhotoPage,ReadInputWindow,Operations.OpenError);
         }
         else if(temp == APb7){      //Copy the Selected Photo to another Album
-            
+            InitializeAlbumChooserPage(LoggedUser);
+            windowTransfer(AlbumPhotoPage,TargetAlbumChooser,Operations.OpenError);
+            ifTACOperationisCopy = true;
         }
         else if(temp == APb8){      //Move the Selected Photo to another Album
-            
+            InitializeAlbumChooserPage(LoggedUser);
+            windowTransfer(AlbumPhotoPage,TargetAlbumChooser,Operations.OpenError);
+            ifTACOperationisCopy = false;
         }
         else if(temp == APb9){      //Go Through the Album with Different Modes
-            
+            twoButtonsOperation = 1;
+            TBTA.setText("On Which Sequence do you want to Go Through the Album?");
+            TB1.setText("Forward");
+            TB2.setText("Backward");
+            windowTransfer(AlbumPhotoPage,TwoButtons,Operations.OpenError);
         }
-        else if(temp == APb10){     //Execute Search Mode
-            
-        }
-        else if(temp == APb11){     //Return to the Album Page
+        else if(temp == APb10){     //Return to the Album Page
             selectedPhoto = null;
             selectedPhotoindex = -1;
             selectedCell = null;
@@ -246,6 +293,25 @@ public class Photos13UIController {
             Current = UserAlbumPage;
             Admin.writeUser();
             InitializeAlbumPage(LoggedUser);
+        }
+        else if(temp == TB1){       //TwoButton Page's Left Button
+            TwoButtonsOperation(true);
+            windowTransfer(TwoButtons,AlbumPhotoPage,Operations.CloseError);
+        }
+        else if(temp == TB2){       //TwoButton Page's Right Button
+            TwoButtonsOperation(false);
+            windowTransfer(TwoButtons,AlbumPhotoPage,Operations.CloseError);
+        }
+        else if(temp == TargetAlbumButton){     //TargetAlbumChooser Page's Ok Button
+            windowTransfer(TargetAlbumChooser,AlbumPhotoPage,Operations.CloseError);
+            ChooseAlbumOperation(ifTACOperationisCopy);
+            selectedPhoto = null;
+            selectedPhotoindex = -1;
+            selectedCell = null;
+            selectedCellindex = -1;
+            setAPButton(1);
+            Admin.writeUser();
+            InitializeAlbumPhotoPage(CurrentAlbum);
         }
     }
     
@@ -290,23 +356,7 @@ public class Photos13UIController {
             cellContent.setAlignment(Pos.CENTER_LEFT);
             Pane cellContainer = new Pane(cellContent);
             cellContainer.setPrefSize(542,96);
-            final int currentindex = i;
-            cellContainer.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
-            cellContainer.setOnMouseClicked(event -> {
-                if(selectedCellindex == currentindex){
-                    selectedCell.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
-                    selectedCellindex = -1;
-                    selectedCell = null;
-                    setUAPButton(true);
-                }
-                else{
-                    if(selectedCell != null) selectedCell.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
-                    cellContainer.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
-                    selectedCellindex = currentindex;
-                    selectedCell = cellContainer;
-                    setUAPButton(false);
-                }
-            });
+            setCellClickEvent(cellContainer,i);
             AlbumGridPane.add(cellContainer,0,i);
         }
     }
@@ -323,8 +373,8 @@ public class Photos13UIController {
             Image image = new Image(p.getPath());
             ImageView iv = new ImageView(image);
             iv.setPreserveRatio(true);
-            if(p.getWidth() > p.getHeight()) iv.setFitWidth(100);
-            else iv.setFitHeight(100);
+            iv.setFitWidth(100);
+            iv.setFitHeight(100);
             StackPane sp = new StackPane(iv);
             sp.setPrefSize(120,120);
             TextArea ta = new TextArea(p.getCaption());
@@ -354,23 +404,51 @@ public class Photos13UIController {
         }
     }
     
+    public void InitializeAlbumChooserPage(User u){
+        TargetAlbumGridPane.getChildren().clear();
+        ArrayList<Album> albums = u.getAlbums();
+        TargetAlbumGridPane.setPrefSize(227,60*albums.size());
+        for(int i=0;i<albums.size();i++){
+            Label cellContent = new Label("\n   "+albums.get(i).getName());
+            cellContent.setAlignment(Pos.CENTER_LEFT);
+            Pane cellContainer = new Pane(cellContent);
+            cellContainer.setPrefSize(227,60);
+            setCellClickEvent(cellContainer,i);
+            TargetAlbumGridPane.add(cellContainer,0,i);
+        }
+    }
+    
+    public void setCellClickEvent(Pane cellContainer, int currentindex){
+        cellContainer.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+        cellContainer.setOnMouseClicked(event -> {
+            if(selectedCellindex == currentindex){
+                selectedCell.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+                selectedCellindex = -1;
+                selectedCell = null;
+                if(Current == UserAlbumPage) setUAPButton(true);
+                else if(Current == AlbumPhotoPage) TargetAlbumButton.setDisable(true);
+            }
+            else{
+                if(selectedCell != null) selectedCell.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
+                cellContainer.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: lightgray;");
+                selectedCellindex = currentindex;
+                selectedCell = cellContainer;
+                if(Current == UserAlbumPage) setUAPButton(false);
+                else if(Current == AlbumPhotoPage) TargetAlbumButton.setDisable(false);
+            }
+        });
+    }
+    
     /**  A method used to control the button availables in album page
-     *   true -> Add button becomes available, other buttons become not available
-     *   false -> Add button becomes not available, other buttons become available
+     *   true -> Add & Search button becomes available, other buttons become not available
+     *   false -> Add & Search button becomes not available, other buttons become available
      */
     public void setUAPButton(boolean mode){
-        if(mode){
-            UAPb1.setDisable(false);
-            UAPb2.setDisable(true);
-            UAPb3.setDisable(true);
-            UAPb4.setDisable(true);
-        }
-        else{
-            UAPb1.setDisable(true);
-            UAPb2.setDisable(false);
-            UAPb3.setDisable(false);
-            UAPb4.setDisable(false);
-        }
+        UAPb1.setDisable(!mode);
+        UAPb2.setDisable(mode);
+        UAPb3.setDisable(mode);
+        UAPb4.setDisable(mode);
+        UAPb6.setDisable(!mode);
     }
     
     /** A method used to control the button availables in photo page
@@ -523,7 +601,73 @@ public class Photos13UIController {
                 
         }
         ReadInputText.setText("");
-        if(waitedOperation == -1) windowTransfer(AlbumPhotoPage,ErrorMessageWindow,Operations.OpenError);
+        if(waitedOperation == -1) windowTransfer(Current,ErrorMessageWindow,Operations.OpenError);
+    }
+    
+    /** A universal method used to operate set functions after closing the TargetAlbumChooser window
+     * 
+     * @param ifCopy 
+     */
+    public void ChooseAlbumOperation(boolean ifCopy){
+        Album Target = LoggedUser.getAlbums().get(selectedCellindex);
+        if(Target.getName().equals(CurrentAlbum.getName())){
+            ErrorMessageText.setText("Error08:The Selected Album is not a Different Album from Current.");
+        }
+        else{
+            ArrayList<EachPhoto> eachphotos = Target.getContains();
+            if(Admin.addSome(eachphotos,CurrentAlbum.getContains().get(selectedPhotoindex))){
+                if(!ifCopy){
+                    ArrayList<EachPhoto> currentphotos = CurrentAlbum.getContains();
+                    currentphotos.remove(selectedPhotoindex);
+                    CurrentAlbum.setContains(currentphotos);
+                }
+                ErrorMessageText.setText("Selected Photo has been successfully "+(ifCopy?"copied":"moved")+" to the Selected Album.");
+            }
+            else{
+                ErrorMessageText.setText("Error09:The Selected Photo already has a copy in the Target Album");
+            }
+        }
+        windowTransfer(AlbumPhotoPage,ErrorMessageWindow,Operations.OpenError);
+    }
+    
+    /** A universal method used to operate set functions after closing the TwoButton window
+     *  1 -> Initialize GoThrough window with direction
+     *  
+     */
+    public void TwoButtonsOperation(boolean leftbutton){
+        switch(twoButtonsOperation){
+            case 1:
+                if(leftbutton) currentGoThroughindex = 0;
+                else currentGoThroughindex = CurrentAlbum.getContains().size()-1;
+                UpdateGoThroughPhoto();
+                GoThrough.setOnMouseClicked(event -> {
+                    if(leftbutton) currentGoThroughindex++;
+                    else currentGoThroughindex--;
+                    if(currentGoThroughindex == CurrentAlbum.getContains().size() || currentGoThroughindex == -1){
+                        currentGoThroughindex = -1;
+                        windowTransfer(GoThrough,AlbumPhotoPage,Operations.NewScene);
+                        Current = AlbumPhotoPage;
+                    }
+                    else UpdateGoThroughPhoto();
+                });
+                GoThrough.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+                    switch(event.getCode()){
+                        case ESCAPE:
+                            currentGoThroughindex = -1;
+                            windowTransfer(GoThrough,AlbumPhotoPage,Operations.NewScene);
+                            Current = AlbumPhotoPage;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                windowTransfer(AlbumPhotoPage,GoThrough,Operations.NewScene);
+                Current = GoThrough;
+                GoThrough.requestFocus();
+                break;
+            case 2:
+                
+        }
     }
     
     /** A method called after a change to a photo's caption/tags has been made
@@ -544,5 +688,23 @@ public class Photos13UIController {
                 }
             }
         }
+    }
+    
+    /** A specific method used to update the GoThrough Photo imageView
+     * 
+     */
+    
+    public void UpdateGoThroughPhoto(){
+        GoThrough.getChildren().clear();
+        EachPhoto ep = CurrentAlbum.getContains().get(currentGoThroughindex);
+        Image image = new Image(ep.getPath());
+        ImageView imageView = new ImageView(image);
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(600);
+        imageView.setFitHeight(400);
+        StackPane GoThroughCurrent = new StackPane(imageView);
+        GoThroughCurrent.setPrefSize(600,400);
+        GoThroughCurrent.setStyle("-fx-background-color: white;");
+        GoThrough.add(GoThroughCurrent,0,0);
     }
 }

@@ -23,6 +23,7 @@ public class Photos extends Application{
 	Scene scene = new Scene(root);
 	primaryStage.setScene(scene);
 	primaryStage.setResizable(false);
+        primaryStage.setTitle("Photos Manager 13");
 	primaryStage.show();
         
         // set kill event

@@ -6,15 +6,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Photos13.Photos13UIController">
    <children>
-      <Pane fx:id="MainPage" prefHeight="400.0" prefWidth="600.0">
+      <Pane fx:id="MainPage" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #badeff;">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
             <Text fill="#6459ffc2" layoutX="166.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Photos Manager 13">
                <font>
                   <Font name="Times New Roman Bold Italic" size="33.0" />
@@ -25,9 +23,8 @@
             <Button fx:id="b3" layoutX="531.0" layoutY="363.0" mnemonicParsing="false" onAction="#convert" text="Quit" />
          </children>
       </Pane>
-      <Pane fx:id="AdminPage" disable="true" prefHeight="400.0" prefWidth="600.0" visible="false">
+      <Pane fx:id="AdminPage" disable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #badeff;" visible="false">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
             <Text layoutX="221.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, admin">
                <font>
                   <Font name="Times New Roman Bold" size="23.0" />
@@ -40,9 +37,8 @@
             <Button fx:id="adminb4" layoutX="513.0" layoutY="353.0" mnemonicParsing="false" onAction="#convert" text="Logout" />
          </children>
       </Pane>
-      <Pane fx:id="UserListPage" disable="true" layoutX="406.0" prefHeight="400.0" prefWidth="194.0" visible="false">
+      <Pane fx:id="UserListPage" disable="true" layoutX="406.0" prefHeight="400.0" prefWidth="194.0" style="-fx-background-color: #c6e1fa;" visible="false">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#c6e1fa" height="400.0" layoutY="1.0" stroke="BLACK" strokeType="INSIDE" width="194.0" />
             <Text layoutX="26.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valid Users:" wrappingWidth="102.0">
                <font>
                   <Font name="Times New Roman" size="19.0" />
@@ -52,9 +48,8 @@
             <Button fx:id="adminb5" layoutX="70.0" layoutY="332.0" mnemonicParsing="false" onAction="#convert" text="Close" />
          </children>
       </Pane>
-      <Pane fx:id="UserAlbumPage" disable="true" prefHeight="400.0" prefWidth="600.0" visible="false">
+      <Pane fx:id="UserAlbumPage" disable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #badeff;" visible="false">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
             <ScrollPane layoutX="21.0" layoutY="22.0" prefHeight="289.0" prefWidth="557.0">
                <content>
                   <GridPane fx:id="AlbumGridPane" />
@@ -64,11 +59,11 @@
             <Button fx:id="UAPb3" disable="true" layoutX="263.0" layoutY="338.0" mnemonicParsing="false" onAction="#convert" text="Rename This" />
             <Button fx:id="UAPb4" disable="true" layoutX="375.0" layoutY="338.0" mnemonicParsing="false" onAction="#convert" text="Open This" />
             <Button fx:id="UAPb5" layoutX="531.0" layoutY="361.0" mnemonicParsing="false" onAction="#convert" text="Logout" />
+            <Button fx:id="UAPb6" layoutX="470.0" layoutY="338.0" mnemonicParsing="false" onAction="#convert" text="Search" />
          </children>
       </Pane>
-      <Pane fx:id="AlbumPhotoPage" disable="true" prefHeight="400.0" prefWidth="600.0" visible="false">
+      <Pane fx:id="AlbumPhotoPage" disable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #badeff;" visible="false">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#badeff" height="400.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
             <ScrollPane prefHeight="400.0" prefWidth="495.0">
                 <content>
                   <GridPane fx:id="AlbumPhotoGridPane" />
@@ -83,12 +78,25 @@
             <Button fx:id="APb7" disable="true" layoutX="505.65917965" layoutY="242.0" mnemonicParsing="false" onAction="#convert" text="Copy Photo" />
             <Button fx:id="APb8" disable="true" layoutX="504.26464835" layoutY="272.0" mnemonicParsing="false" onAction="#convert" text="Move Photo" />
             <Button fx:id="APb9" layoutX="504.97949215" layoutY="302.0" mnemonicParsing="false" onAction="#convert" text="Go Through" />
-            <Button fx:id="APb10" layoutX="520.32226555" layoutY="332.0" mnemonicParsing="false" onAction="#convert" text="Search" />
-            <Button fx:id="APb11" layoutX="519.02148435" layoutY="362.0" mnemonicParsing="false" onAction="#convert" text="Return" />
+            <Button fx:id="APb10" layoutX="519.02148435" layoutY="362.0" mnemonicParsing="false" onAction="#convert" text="Return" />
          </children></Pane>
-      <Pane fx:id="ReadInputWindow" disable="true" layoutX="200.0" layoutY="113.0" prefHeight="142.0" prefWidth="200.0" visible="false">
+      <GridPane fx:id="GoThrough" disable="true" prefHeight="400.0" prefWidth="600.0" visible="false" />
+      <Pane fx:id="TargetAlbumChooser" disable="true" layoutX="160.0" layoutY="72.0" prefHeight="259.0" prefWidth="282.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1;" visible="false">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="142.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Your Target Album">
+               <font>
+                  <Font name="Times New Roman" size="14.0" />
+               </font>
+            </Text>
+            <ScrollPane layoutX="20.0" layoutY="29.0" prefHeight="186.0" prefWidth="242.0">
+                <content>
+                  <GridPane fx:id="TargetAlbumGridPane" />
+               </content></ScrollPane>
+            <Button fx:id="TargetAlbumButton" disable="true" layoutX="114.0" layoutY="222.0" mnemonicParsing="false" onAction="#convert" text="Ok" />
+         </children>
+      </Pane>
+      <Pane fx:id="ReadInputWindow" disable="true" layoutX="200.0" layoutY="113.0" prefHeight="142.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1;" visible="false">
+         <children>
             <TextField fx:id="ReadInputText" layoutX="23.0" layoutY="65.0" prefHeight="25.0" prefWidth="152.0" />
             <Button fx:id="b4" layoutX="83.0" layoutY="105.0" mnemonicParsing="false" onAction="#convert" text="Ok" />
             <TextArea fx:id="ReadInputMessage" editable="false" layoutX="20.0" layoutY="14.0" prefHeight="25.0" prefWidth="161.0">
@@ -98,11 +106,17 @@
             </TextArea>
          </children>
       </Pane>
-      <Pane fx:id="ErrorMessageWindow" disable="true" layoutX="200.0" layoutY="144.0" prefHeight="111.0" prefWidth="200.0" visible="false">
+      <Pane fx:id="ErrorMessageWindow" disable="true" layoutX="200.0" layoutY="144.0" prefHeight="111.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1;" visible="false">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="106.0" layoutY="3.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
             <TextArea fx:id="ErrorMessageText" editable="false" layoutX="23.0" layoutY="29.0" prefHeight="37.0" prefWidth="152.0" />
             <Button fx:id="b2" layoutX="83.0" layoutY="74.0" mnemonicParsing="false" onAction="#convert" text="Ok" />
+         </children>
+      </Pane>
+      <Pane fx:id="TwoButtons" disable="true" layoutX="196.0" layoutY="142.0" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: black; -fx-border-width: 1;" visible="false">
+         <children>
+            <TextArea fx:id="TBTA" editable="false" layoutX="14.0" layoutY="19.0" prefHeight="21.0" prefWidth="172.0" />
+            <Button fx:id="TB1" layoutX="26.0" layoutY="75.0" mnemonicParsing="false" onAction="#convert" text="Forward" />
+            <Button fx:id="TB2" layoutX="108.0" layoutY="75.0" mnemonicParsing="false" onAction="#convert" text="Backward" />
          </children>
       </Pane>
    </children>
