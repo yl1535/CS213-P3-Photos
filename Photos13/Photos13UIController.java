@@ -1,15 +1,16 @@
 package Photos13;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.layout.*;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.*;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.ArrayList;
-import javafx.geometry.Pos;
 import java.util.Calendar;
 
 public class Photos13UIController {
@@ -54,6 +55,7 @@ public class Photos13UIController {
     @FXML Button SPb2;
     @FXML Button SPb3;
     @FXML Button TIButton1;
+    @FXML Button TIButton2;
     @FXML Pane MainPage;
     @FXML Pane ErrorMessageWindow;
     @FXML Pane AdminPage;
@@ -66,6 +68,7 @@ public class Photos13UIController {
     @FXML Pane DateInputer;
     @FXML Pane SearchResultPage;
     @FXML Pane TagInputer1;
+    @FXML Pane TagInputer2;
     @FXML GridPane AlbumGridPane;
     @FXML GridPane AlbumPhotoGridPane;
     @FXML GridPane GoThrough;
@@ -84,6 +87,11 @@ public class Photos13UIController {
     @FXML TextField DIRightTF;
     @FXML TextField TILeftTF1;
     @FXML TextField TIRightTF1;
+    @FXML TextField TILeftTF2;
+    @FXML TextField TIRightTF2;
+    @FXML TextField TILeftTF3;
+    @FXML TextField TIRightTF3;
+    @FXML ChoiceBox<String> TagPipe;
     
     Pane Current;   //A global Pane variable to store what the current background pane is, used for scene transferings
     User LoggedUser;    //A global User variable to store what the current logged user is
@@ -98,6 +106,7 @@ public class Photos13UIController {
     int twoButtonsOperation = -1; //A global variable for storing the current action required to be proceed after closing TwoButtons Window
     int currentGoThroughindex = -1; //A global variable for storing the index of current GoThrough photo
     boolean ifTACOperationisCopy = false; //A global variable for storing if the move photo process is copy
+    boolean ifTagPipeisAND = false; //A global variable for storing if Tag Pipe is AND using the double tag search mode
     
     public void convert(ActionEvent e) throws Exception{
         Button temp = (Button)e.getSource();
@@ -334,7 +343,7 @@ public class Photos13UIController {
             TB2.setText("Tags");
             windowTransfer(UserAlbumPage,TwoButtons,Operations.OpenError);
         }
-        else if(temp == DIButton){
+        else if(temp == DIButton){  //SearchMode: Date Range
             windowTransfer(DateInputer,UserAlbumPage,Operations.CloseError);
             Calendar FirstDate = Admin.ifTimeFormatCorrect(DILeftTF.getText());
             Calendar SecondDate = Admin.ifTimeFormatCorrect(DIRightTF.getText());
@@ -361,15 +370,15 @@ public class Photos13UIController {
                 windowTransfer(UserAlbumPage,SearchResultPage,Operations.NewScene);
                 Current = SearchResultPage;
             }
-           DILeftTF.setText("");
-           DIRightTF.setText("");
+            DILeftTF.setText("");
+            DIRightTF.setText("");
         }
-        else if(temp == SPb1){
+        else if(temp == SPb1){  //Opens window for inputing Name of New Album
             waitedOperation = 9;
             ReadInputMessage.setText("Type in the Name of the New Album you want to Copy the Search Results to");
             windowTransfer(SearchResultPage,ReadInputWindow,Operations.OpenError);
         }
-        else if(temp == SPb3){
+        else if(temp == SPb3){  //returns back to user-album page
             selectedPhoto = null;
             selectedPhotoindex = -1;
             selectedCell = null;
@@ -381,26 +390,67 @@ public class Photos13UIController {
             InitializeAlbumPage(LoggedUser);
             Admin.writeUser();
         }
-        else if(temp == TIButton1){
+        else if(temp == TIButton1){     //SearchMode: Single Pair of Tag
             windowTransfer(TagInputer1,UserAlbumPage,Operations.CloseError);
             Tags tag = new Tags(TILeftTF1.getText(),TIRightTF1.getText());
-            Album album = new Album("Search Type: "+TILeftTF1.getText()+":"+TIRightTF1.getText());
-            ArrayList<EachPhoto> eachphotos = new ArrayList<EachPhoto>();
-            for(int i=0;i<LoggedUser.getAlbums().size();i++){
-                Album a = LoggedUser.getAlbums().get(i);
-                for(int j=0;j<a.getContains().size();j++){
-                    EachPhoto ep = a.getContains().get(j);
-                    for(int k=0;k<ep.getTags().size();k++){
-                        if(ep.getTags().get(k).equals(tag)) Admin.addSome(eachphotos,ep);
+            if(tag.getTagName().equals("")||tag.getTagValue().equals("")){
+                ErrorMessageText.setText("Error12:Invalid Input, TagName or TagValue input is empty");
+                windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
+            }
+            else{
+                Album album = new Album("Search Type: "+TILeftTF1.getText()+":"+TIRightTF1.getText());
+                ArrayList<EachPhoto> eachphotos = new ArrayList<EachPhoto>();
+                for(int i=0;i<LoggedUser.getAlbums().size();i++){
+                    Album a = LoggedUser.getAlbums().get(i);
+                    for(int j=0;j<a.getContains().size();j++){
+                        EachPhoto ep = a.getContains().get(j);
+                        for(int k=0;k<ep.getTags().size();k++){
+                            if(ep.getTags().get(k).equals(tag)) Admin.addSome(eachphotos,ep);
+                        }
                     }
                 }
+                album.setContains(eachphotos);
+                InitializeSearchResultPage(album);
+                windowTransfer(UserAlbumPage,SearchResultPage,Operations.NewScene);
+                Current = SearchResultPage;
             }
-            album.setContains(eachphotos);
-            InitializeSearchResultPage(album);
-            windowTransfer(UserAlbumPage,SearchResultPage,Operations.NewScene);
-            Current = SearchResultPage;
             TILeftTF1.setText("");
             TIRightTF1.setText("");
+        }
+        else if(temp == TIButton2){ //SearchMode: Double Pairs of Tags
+            windowTransfer(TagInputer2,UserAlbumPage,Operations.CloseError);
+            Tags tag1 = new Tags(TILeftTF2.getText(),TIRightTF2.getText());
+            Tags tag2 = new Tags(TILeftTF3.getText(),TIRightTF3.getText());
+            if(tag1.getTagName().equals("") || tag1.getTagValue().equals("") || 
+                    tag2.getTagName().equals("") || tag2.getTagValue().equals("")){
+                ErrorMessageText.setText("Error12:Invalid Input, TagName or TagValue input is empty");
+                windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
+            }
+            else{
+                Album album = new Album("Search Type: "+TILeftTF2.getText()+":"+TIRightTF2.getText()+" "+(ifTagPipeisAND?"AND":"OR")
+                        +" "+TILeftTF3.getText()+":"+TIRightTF3.getText());
+                ArrayList<EachPhoto> eachphotos = new ArrayList<EachPhoto>();
+                for(int i=0;i<LoggedUser.getAlbums().size();i++){
+                    Album a = LoggedUser.getAlbums().get(i);
+                    for(int j=0;j<a.getContains().size();j++){
+                        EachPhoto ep = a.getContains().get(j);
+                        int matches = 0;
+                        for(int k=0;k<ep.getTags().size();k++){
+                            if(ep.getTags().get(k).equals(tag1) || ep.getTags().get(k).equals(tag2)) matches++;
+                        }
+                        if(ifTagPipeisAND && matches == 2) Admin.addSome(eachphotos,ep);
+                        if(!ifTagPipeisAND && matches >= 1) Admin.addSome(eachphotos, ep);
+                    }
+                }
+                album.setContains(eachphotos);
+                InitializeSearchResultPage(album);
+                windowTransfer(UserAlbumPage,SearchResultPage,Operations.NewScene);
+                Current = SearchResultPage;
+            }
+            TILeftTF2.setText("");
+            TIRightTF2.setText("");
+            TILeftTF3.setText("");
+            TIRightTF3.setText("");
         }
         
     }
@@ -702,13 +752,14 @@ public class Photos13UIController {
                 EachPhoto ep6 = eachphotos6.get(selectedPhotoindex);
                 ArrayList<Tags> tags6 = ep6.getTags();
                 Tags newTag = new Tags(ReadInput.get(0),ReadInput.get(1));
-                if(Admin.addSome(tags6,newTag)){
+                if(newTag.getTagName().equals("") || newTag.getTagValue().equals("")) ErrorMessageText.setText("Error12:Invalid Input, TagName or TagValue input is empty");
+                else if(Admin.addSome(tags6,newTag)){
                     ep6.setTags(tags6);
                     CurrentAlbum.setContains(eachphotos6);
                     ErrorMessageText.setText("New Tag has been successfully added to the selected photo.");
                     Admin.UpdateToAll(ep6);
                 }
-                else ErrorMessageText.setText("Error05:Specified Tag has already been added to the selected Photo.");
+                else ErrorMessageText.setText("Error05:Specified Tag has already been added to the selected Photo");
                 selectedPhotoindex = -1;
                 selectedPhoto = null;
                 setAPButton(1);
@@ -727,7 +778,8 @@ public class Photos13UIController {
                 EachPhoto ep8 = eachphotos8.get(selectedPhotoindex);
                 ArrayList<Tags> tags8 = ep8.getTags();
                 Tags t = new Tags(ReadInput.get(0),ReadInput.get(1));
-                if(Admin.deleteSome(tags8, t)){
+                if(t.getTagName().equals("") || t.getTagValue().equals("")) ErrorMessageText.setText("Error12:Invalid Input, TagName or TagValue input is empty");
+                else if(Admin.deleteSome(tags8, t)){
                     ep8.setTags(tags8);
                     CurrentAlbum.setContains(eachphotos8);
                     ErrorMessageText.setText("The specified Tag has been successfully removed from the selected photo.");
@@ -824,7 +876,6 @@ public class Photos13UIController {
                 break;
             case 2:
                 if(leftbutton){
-                    windowTransfer(TwoButtons,UserAlbumPage,Operations.CloseError);
                     windowTransfer(UserAlbumPage,DateInputer,Operations.OpenError);
                 }
                 else{
@@ -837,11 +888,18 @@ public class Photos13UIController {
                 break;
             case 3:
                 if(leftbutton){
-                    windowTransfer(TwoButtons,UserAlbumPage,Operations.CloseError);
                     windowTransfer(UserAlbumPage,TagInputer1,Operations.OpenError);
                 }
                 else{
-                    
+                    windowTransfer(UserAlbumPage,TagInputer2,Operations.OpenError);
+                    TIButton2.setDisable(true);
+                    TagPipe.setItems(FXCollections.observableArrayList("AND","OR"));
+                    TagPipe.getSelectionModel().selectedItemProperty().addListener((observable,oldvalue,newvalue) ->{
+                        TIButton2.setDisable(false);
+                        if(newvalue == null) TIButton2.setDisable(true);
+                        else if(newvalue.equals("AND")) ifTagPipeisAND = true;
+                        else ifTagPipeisAND = false;
+                    });
                 }
                 break;
         }
@@ -860,7 +918,6 @@ public class Photos13UIController {
                     if(ep.getPath() == p.getPath()){
                         ep.setCaption(p.getCaption());
                         ep.setTags(p.getTags());
-                            // TODO: Changes to time?
                     }
                 }
             }
