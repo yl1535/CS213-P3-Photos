@@ -49,6 +49,4 @@ public class Photos extends Application {
         Admin.initializeList();
         launch(args);
     }
-    
-    //ToDo: Update GUI Bug Report
 }
