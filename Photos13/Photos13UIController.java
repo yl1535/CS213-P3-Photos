@@ -111,7 +111,7 @@ public class Photos13UIController {
     boolean ifTACOperationisCopy = false; //A global variable for storing if the move photo process is copy
     boolean ifTagPipeisAND = false; //A global variable for storing if Tag Pipe is AND using the double tag search mode
     
-    public void convert(ActionEvent e) throws Exception{
+    public void convert(ActionEvent e){
         Button temp = (Button)e.getSource();
         if(temp == b3){ //Safely quit Button
             Stage s = (Stage)temp.getScene().getWindow();
@@ -186,7 +186,11 @@ public class Photos13UIController {
         }
         else if(temp == adminb4){   //AdminPage Logout Button
             windowTransfer(AdminPage,MainPage,Operations.NewScene);
-            Admin.writeUser();
+            try{
+                Admin.writeUser();
+            } catch(Exception ex){
+                Admin.PrintErrorMessage(ex);
+            }
         }
         else if(temp == adminb5){   //Window UsersList Close Button
             windowTransfer(UserListPage,null,Operations.CloseWindow);
@@ -224,7 +228,11 @@ public class Photos13UIController {
             setUAPButton(true);
             windowTransfer(UserAlbumPage,MainPage,Operations.NewScene);
             Current = MainPage;
-            Admin.writeUser();
+            try{
+                Admin.writeUser();
+            } catch(Exception ex){
+                Admin.PrintErrorMessage(ex);
+            }
         }
         else if(temp == b4){        //Close ReadInput Window
             ReadInput.add(ReadInputText.getText());
@@ -238,11 +246,15 @@ public class Photos13UIController {
             ArrayList<EachPhoto> eachphotos = CurrentAlbum.getContains();
             if(Admin.addSome(eachphotos, ep)){
                 CurrentAlbum.setContains(eachphotos);
-                Admin.writeUser();
+                try{
+                    Admin.writeUser();
+                } catch(Exception ex){
+                    Admin.PrintErrorMessage(ex);
+                };
                 InitializeAlbumPhotoPage(CurrentAlbum);
                 ErrorMessageText.setText("Selected Photo has successfully added to the album.");
             }
-            else ErrorMessageText.setText("Error03:Selected Photo already has a copy in current album.");
+            else ErrorMessageText.setText("Error05:Selected Photo already has a copy in current album.");
             AddPhotoPage.setDisable(true);
             windowTransfer(Current,ErrorMessageWindow,Operations.OpenError);
         }
@@ -273,7 +285,7 @@ public class Photos13UIController {
                 try{
                     formattedpath = file.toURI().toURL().toString();
                 } catch(Exception ex){
-                    ex.printStackTrace();
+                    Admin.PrintErrorMessage(ex);
                 }
             }
             Image image = new Image(formattedpath);
@@ -341,7 +353,11 @@ public class Photos13UIController {
             setUAPButton(true);
             windowTransfer(AlbumPhotoPage,UserAlbumPage,Operations.NewScene);
             Current = UserAlbumPage;
-            Admin.writeUser();
+            try{
+                Admin.writeUser();
+            } catch(Exception ex){
+                Admin.PrintErrorMessage(ex);
+            }
             InitializeAlbumPage(LoggedUser);
         }
         else if(temp == TB1){       //TwoButton Page's Left Button
@@ -360,7 +376,11 @@ public class Photos13UIController {
             selectedCell = null;
             selectedCellindex = -1;
             setAPButton(1);
-            Admin.writeUser();
+            try{
+                Admin.writeUser();
+            } catch(Exception ex){
+                Admin.PrintErrorMessage(ex);
+            }
             InitializeAlbumPhotoPage(CurrentAlbum);
         }
         else if(temp == UAPb6){     //Activates Search Mode
@@ -375,11 +395,11 @@ public class Photos13UIController {
             Calendar FirstDate = Admin.ifTimeFormatCorrect(DILeftTF.getText());
             Calendar SecondDate = Admin.ifTimeFormatCorrect(DIRightTF.getText());
             if(FirstDate == null || SecondDate == null){
-                ErrorMessageText.setText("Error10:One or both or your inputs is not in correct format, follow the format in prompted text, including right slashes");
+                ErrorMessageText.setText("Error06:One or both or your inputs is not in correct format, follow the format in prompted text, including right slashes");
                 windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
             }
             else if(FirstDate.after(SecondDate)){
-                ErrorMessageText.setText("Error11:The first date you provided is later than the second one");
+                ErrorMessageText.setText("Error07:The first date you provided is later than the second one");
                 windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
             }
             else{
@@ -415,13 +435,17 @@ public class Photos13UIController {
             Current = UserAlbumPage;
             windowTransfer(SearchResultPage,UserAlbumPage,Operations.NewScene);
             InitializeAlbumPage(LoggedUser);
-            Admin.writeUser();
+            try{
+                Admin.writeUser();
+            } catch(Exception ex){
+                Admin.PrintErrorMessage(ex);
+            }
         }
         else if(temp == TIButton1){     //SearchMode: Single Pair of Tag
             windowTransfer(TagInputer1,UserAlbumPage,Operations.CloseError);
             Tags tag = new Tags(TILeftTF1.getText(),TIRightTF1.getText());
             if(tag.getTagName().equals("")||tag.getTagValue().equals("")){
-                ErrorMessageText.setText("Error12:Invalid Input, TagName or TagValue input is empty");
+                ErrorMessageText.setText("Error08:Invalid Input, TagName or TagValue input is empty");
                 windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
             }
             else{
@@ -450,7 +474,7 @@ public class Photos13UIController {
             Tags tag2 = new Tags(TILeftTF3.getText(),TIRightTF3.getText());
             if(tag1.getTagName().equals("") || tag1.getTagValue().equals("") || 
                     tag2.getTagName().equals("") || tag2.getTagValue().equals("")){
-                ErrorMessageText.setText("Error12:Invalid Input, TagName or TagValue input is empty");
+                ErrorMessageText.setText("Error09:Invalid Input, TagName or TagValue input is empty");
                 windowTransfer(UserAlbumPage,ErrorMessageWindow,Operations.OpenError);
             }
             else{
@@ -546,7 +570,7 @@ public class Photos13UIController {
                 try{
                     formattedpath = file.toURI().toURL().toString();
                 } catch(Exception e){
-                    e.printStackTrace();
+                    Admin.PrintErrorMessage(e);
                 }
             }
             Image image = new Image(formattedpath);
@@ -601,7 +625,7 @@ public class Photos13UIController {
                 try{
                     formattedpath = file.toURI().toURL().toString();
                 } catch(Exception e){
-                    e.printStackTrace();
+                    Admin.PrintErrorMessage(e);
                 }
             }
             Image image = new Image(formattedpath);
@@ -740,7 +764,7 @@ public class Photos13UIController {
     /**  A universal method used to operate set functions after receiving input
      *   1 -> Add new Album
      *   2 -> Rename selected Album
-     * 
+     *   3 -> Add New Photo to Album
      *   4 -> Caption/Recaption selected Photo
      *   5 -> Transition to operation 6
      *   6 -> Add new tag(TagType, TagName) to selected Photo
@@ -760,7 +784,7 @@ public class Photos13UIController {
                     InitializeAlbumPage(LoggedUser);
                     ErrorMessageText.setText("New Album has been successfully added.");
                 }
-                else ErrorMessageText.setText("Error05:Album with this name already exist");
+                else ErrorMessageText.setText("Error10:Album with this name already exist");
                 ReadInput.remove(0);
                 waitedOperation = -1;
                 break;
@@ -810,7 +834,7 @@ public class Photos13UIController {
                     ErrorMessageText.setText("New Tag has been successfully added to the selected photo.");
                     Admin.UpdateToAll(ep6);
                 }
-                else ErrorMessageText.setText("Error05:Specified Tag has already been added to the selected Photo");
+                else ErrorMessageText.setText("Error11:Specified Tag has already been added to the selected Photo");
                 selectedPhotoindex = -1;
                 selectedPhoto = null;
                 setAPButton(1);
@@ -835,7 +859,7 @@ public class Photos13UIController {
                     CurrentAlbum.setContains(eachphotos8);
                     ErrorMessageText.setText("The specified Tag has been successfully removed from the selected photo.");
                 }
-                else ErrorMessageText.setText("Error06:Specified Tag Not Found.");
+                else ErrorMessageText.setText("Error12:Specified Tag Not Found.");
                 selectedPhotoindex = -1;
                 selectedPhoto = null;
                 setAPButton(1);
@@ -852,12 +876,10 @@ public class Photos13UIController {
                     LoggedUser.setAlbums(albums9);
                     ErrorMessageText.setText("New Album has been successfully added.");
                 }
-                else ErrorMessageText.setText("Error05:Album with this name already exist");
+                else ErrorMessageText.setText("Error13:Album with this name already exist");
                 ReadInput.remove(0);
                 waitedOperation = -1;
-                break;
-            case 10:
-                
+                break;  
         }
         ReadInputText.setText("");
         if(waitedOperation == -1) windowTransfer(Current,ErrorMessageWindow,Operations.OpenError);
@@ -870,7 +892,7 @@ public class Photos13UIController {
     public void ChooseAlbumOperation(boolean ifCopy){
         Album Target = LoggedUser.getAlbums().get(selectedCellindex);
         if(Target.getName().equals(CurrentAlbum.getName())){
-            ErrorMessageText.setText("Error08:The Selected Album is not a Different Album from Current.");
+            ErrorMessageText.setText("Error14:The Selected Album is not a Different Album from Current.");
         }
         else{
             ArrayList<EachPhoto> eachphotos = Target.getContains();
@@ -883,7 +905,7 @@ public class Photos13UIController {
                 ErrorMessageText.setText("Selected Photo has been successfully "+(ifCopy?"copied":"moved")+" to the Selected Album.");
             }
             else{
-                ErrorMessageText.setText("Error09:The Selected Photo already has a copy in the Target Album");
+                ErrorMessageText.setText("Error15:The Selected Photo already has a copy in the Target Album");
             }
         }
         windowTransfer(AlbumPhotoPage,ErrorMessageWindow,Operations.OpenError);
@@ -1000,5 +1022,22 @@ public class Photos13UIController {
         fileChooser.getExtensionFilters().add(imageFilter);
         File file = fileChooser.showOpenDialog(null);
         return file.getAbsolutePath();
+    }
+    
+    public Operations getOperation(int type){
+        switch(type){
+            case 1:
+                return Operations.OpenError;
+            case 2:
+                return Operations.CloseError;
+            case 3:
+                return Operations.NewWindow;
+            case 4:
+                return Operations.CloseWindow;
+            case 5:
+                return Operations.NewScene;
+            default:
+                return null;
+        }
     }
 }

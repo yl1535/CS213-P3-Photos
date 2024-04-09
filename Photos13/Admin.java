@@ -1,19 +1,20 @@
 package Photos13;
 
-import java.util.ArrayList;
-import java.io.*;
-import java.util.Calendar;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
 /*
  * The Main Class for Operation methods, note that this is not for user-admin
 */
 public class Admin {
     static final long serialVersionID = 1L;
     public static ArrayList<User> UserList = new ArrayList<>();
-    private static final String storeDir = "./";  //src/Photos13/data
+    private static final String storeDir = "./";
     private static final String storeFile = "UserLists.tt2";
+    public static Photos13UIController AdminCopy;
     
     public static void initializeList() throws Exception{
         UserList = readData(storeDir,storeFile);
@@ -51,9 +52,13 @@ public class Admin {
         writeData(storeDir,storeFile,UserList);
     }
     
-    private static void writeData(String storeDir, String storeFile, ArrayList<User> al) throws IOException{
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
-        oos.writeObject(al);
+    private static void writeData(String storeDir, String storeFile, ArrayList<User> al){
+        try{
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
+            oos.writeObject(al);
+        } catch (Exception e){
+            PrintErrorMessage(e);
+        }
     }
     
     private static ArrayList<User> readData(String storeDir, String storeFile){
@@ -65,22 +70,22 @@ public class Admin {
             try{
                 writeData(storeDir,storeFile,users);
             } catch (Exception e1){
-                e1.printStackTrace();
+                PrintErrorMessage(e1);
             }
         } catch (FileNotFoundException e){
             initializeSaveFile(users);
             try {
                 new FileOutputStream(storeDir + File.separator + storeFile).close();
             } catch(IOException i){
-                i.printStackTrace();
+                PrintErrorMessage(i);
             }
             try{
                 writeData(storeDir,storeFile,users);
             } catch (Exception e1){
-                e1.printStackTrace();
+                PrintErrorMessage(e1);
             }
         } catch (Exception e){
-            e.printStackTrace();
+            PrintErrorMessage(e);
         }
         return users;
     }
@@ -110,7 +115,7 @@ public class Admin {
         try{
             writeUser();
         } catch(Exception e){
-            e.printStackTrace();
+            PrintErrorMessage(e);
         }
     }
     
@@ -150,7 +155,7 @@ public class Admin {
             BufferedImage image = ImageIO.read(completepath);
             eachphoto.setSize(image.getWidth(),image.getHeight());
         } catch(Exception e){
-            e.printStackTrace();    //TODO: GUI BUG REPORT
+            PrintErrorMessage(e);
         }
         return eachphoto;
     }
@@ -199,5 +204,10 @@ public class Admin {
                 }
             }
         }
+    }
+    
+    public static void PrintErrorMessage(Exception e){
+        AdminCopy.ErrorMessageText.setText("Exception: "+e.toString());
+        AdminCopy.windowTransfer(AdminCopy.Current, AdminCopy.ErrorMessageWindow,AdminCopy.getOperation(1));
     }
 }

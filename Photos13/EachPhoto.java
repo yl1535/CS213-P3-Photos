@@ -13,7 +13,7 @@ public class EachPhoto implements Serializable{
     private int height;
     private Calendar Date;
     
-    public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){   //ToDO: Add Date of Photo
+    public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){
         this.PhotoPath = PhotoPath;
         this.Caption = Caption;
         this.tags = tags;

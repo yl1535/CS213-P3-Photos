@@ -27,6 +27,10 @@ public class Photos extends Application{
         
         // set kill event
         primaryStage.setOnCloseRequest(event -> Admin.SafelyQuit());
+        
+        // Extra: Copy a Controller instance to let Admin executes Error Window
+        Photos13UIController cont = loader.getController();
+        Admin.AdminCopy = cont;
     }
     
     public static void main(String[] args) throws Exception{
