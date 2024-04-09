@@ -1,8 +1,8 @@
 package Photos13;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.io.Serializable;
 
 /**
  * This is the class for each individual photo within an album 
@@ -19,17 +19,13 @@ public class EachPhoto implements Serializable{
     private int height;
     private Calendar Date;
     
-<<<<<<< HEAD
-    public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){
-=======
     /**
      * Constructs each photo
      * @param PhotoPath
      * @param Caption
      * @param tags
      */
-    public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){   //ToDO: Add Date of Photo
->>>>>>> a35fd621de5cbc9e4e132589af930331e45cf098
+    public EachPhoto(String PhotoPath, String Caption, ArrayList<Tags> tags){
         this.PhotoPath = PhotoPath;
         this.Caption = Caption;
         this.tags = tags;
@@ -46,15 +42,15 @@ public class EachPhoto implements Serializable{
     }
     
     /**
-     * Gets the path of a photo
-     * @return
+     * Gets the path of the photo
+     * @return PhotoPath
      */
     public String getPath(){
         return PhotoPath;
     }
     
     /**
-     * Sets the new path of a photo
+     * Sets the new path of the photo
      * @param newPath
      */
     public void setPath(String newPath){
@@ -62,15 +58,15 @@ public class EachPhoto implements Serializable{
     }
     
     /**
-     * Gets the caption of a photo
-     * @return
+     * Gets the caption of the photo
+     * @return Caption
      */
     public String getCaption(){
         return Caption;
     }
     
     /**
-     * Sets the new caption of a photo
+     * Sets the new caption of the photo
      * @param newCaption
      */
     public void setCaption(String newCaption){
@@ -78,7 +74,7 @@ public class EachPhoto implements Serializable{
     }
     
     /**
-     * Get the tags of a photo
+     * Get the list of tags of the photo
      * @return tags
      */
     public ArrayList<Tags> getTags(){
@@ -86,7 +82,7 @@ public class EachPhoto implements Serializable{
     }
     
     /**
-     * Set the new tags of a photo
+     * Set the new list of tags of the photo
      * @param newTags
      */
     public void setTags(ArrayList<Tags> newTags){
@@ -94,15 +90,15 @@ public class EachPhoto implements Serializable{
     }
     
     /**
-     * Get the width of a photo
+     * Get the width of the photo
      * @return width
      */
     public int getWidth(){
         return width;
     }
-  
+    
     /**
-     * Get the height of a photo
+     * Get the height of the photo
      * @return height
      */
     public int getHeight(){
@@ -120,8 +116,8 @@ public class EachPhoto implements Serializable{
     }
     
     /**
-     * Get date of photo
-     * @return
+     * Get date of the photo in Calendar datatype format
+     * @return Date
      */
     public Calendar getDate(){
         return Date;
@@ -129,15 +125,15 @@ public class EachPhoto implements Serializable{
     
     /**
      * Set the data of photo
-     * @param c
+     * @param calendar
      */
-    public void setDate(Calendar c){
-        this.Date = c;
+    public void setDate(Calendar calendar){
+        this.Date = calendar;
     }
     
-   /**
-    * Gives the photo's path
-    * @return path of photo
+    /**
+    * Return toString value with path of the photo
+    * @return PhotoPath
     */
     public String toString(){
         return PhotoPath;

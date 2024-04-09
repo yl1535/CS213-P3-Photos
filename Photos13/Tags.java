@@ -22,15 +22,15 @@ public class Tags implements Serializable{
     }
     
     /**
-     * Gets a tag name
-     * @return
+     * Gets the name of the tag
+     * @return TagName
      */
     public String getTagName(){
         return TagName;
     }
     
     /**
-     * Sets a tag name
+     * Sets the name of the tag
      * @param newName
      */
     public void setTagName(String newName){
@@ -38,15 +38,15 @@ public class Tags implements Serializable{
     }
     
     /**
-     * Gets a tag value
-     * @return
+     * Gets the value of the tag
+     * @return TagValue
      */
     public String getTagValue(){
         return TagValue;
     }
     
     /**
-     * Sets a tag value
+     * Sets the value of the tag
      * @param newValue
      */
     public void setTagValue(String newValue){
@@ -54,7 +54,8 @@ public class Tags implements Serializable{
     }
     
     /**
-     * @return TagName and TagValue as String
+     * Return toString value with a String made of TagName and TagValue
+     * @return TagName + " " + TagValue
      */
     public String toString(){
         return TagName + " " + TagValue;
@@ -63,7 +64,7 @@ public class Tags implements Serializable{
     /**
      * Check if tags identical in name AND value
      * @param tag
-     * @return
+     * @return If Tags Are Equal in boolean format
      */
     public boolean equals(Tags tag){
         return this.TagName.equals(tag.getTagName()) && this.TagValue.equals(tag.getTagValue());

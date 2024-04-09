@@ -23,22 +23,23 @@ public class User implements Serializable{
     }
     
     /**
-     * 
+     * Return toString value with the name of the User
+     * @return name
      */
     public String toString(){
         return name;
     }
     
     /**
-     * Get name of user
-     * @return name of user (NOT of tag)
+     * Gets the name of user
+     * @return name
      */
     public String getName(){
         return name;
     }
     
     /**
-     * Set name of user
+     * Sets the name of user
      * @param name
      */
     public void setName(String name){
@@ -47,7 +48,7 @@ public class User implements Serializable{
     
     /**
      * Get the albums associated with a particular user
-     * @return
+     * @return albums
      */
     public ArrayList<Album> getAlbums(){
         return albums;

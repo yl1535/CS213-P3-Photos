@@ -9,13 +9,12 @@ import java.util.Calendar;
  * @author Yue Luo
  * @author Nicole Le
  */
-
 public class Album implements Serializable{
     static final long serialVersionID = 1L;
     private ArrayList<EachPhoto> Contains;
     private String name;
     
-   /**
+    /**
     * Construct the album
     * @param Contains
     * @param name
@@ -26,24 +25,25 @@ public class Album implements Serializable{
     }
     
     /**
-     * Construct the album
-     * @param name
-     */
+    * Construct the album
+    * @param Contains
+    * @param name
+    */
     public Album(String name){
         this.name = name;
         Contains = new ArrayList<EachPhoto>();
     }
     
     /**
-     * Getter method
-     * @return
+     * Gets the list of photos in the album
+     * @return Contains
      */
     public ArrayList<EachPhoto> getContains(){
         return Contains;
     }
     
     /**
-     * Setter method
+     * Set the new list of photos in the album
      * @param newContains
      */
     public void setContains(ArrayList<EachPhoto> newContains){
@@ -51,15 +51,15 @@ public class Album implements Serializable{
     }
     
     /**
-     * Getter method for name
-     * @return
+     * Gets the name of the Album
+     * @return name
      */
     public String getName(){
         return name;
     }
     
     /**
-     * Setter method for name
+     * Sets the name of the Album
      * @param newName
      */
     public void setName(String newName){
@@ -67,8 +67,8 @@ public class Album implements Serializable{
     }
     
     /**
-     * Getter method for the earliest
-     * @return
+     * Gets the earliest modification time of the photos stored
+     * @return Earliest Modification Time in String format
      */
     public String getEarliest(){
         if(Contains.size() == 0) return null;
@@ -82,8 +82,8 @@ public class Album implements Serializable{
     }
     
     /**
-     * Getter method for the latest
-     * @return
+     * Gets the latest modification time of the photos stored
+     * @return Latest Modification Time in String format
      */
     public String getLatest(){
         if(Contains.size() == 0) return null;
@@ -97,7 +97,8 @@ public class Album implements Serializable{
     }
     
     /**
-     * Return name
+     * Return toString value with name of the album
+     * @return name
      */
     public String toString(){
         return name;

@@ -4,14 +4,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.URL;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Calendar;
-/*
-=======
 
 /**
->>>>>>> a35fd621de5cbc9e4e132589af930331e45cf098
  * The Main Class for Operation methods, note that this is not for user-admin
  * @author Yue Luo
  * @author Nicole Le
@@ -23,21 +19,28 @@ public class Admin {
     private static final String storeFile = "UserLists.tt2";
     public static Photos13UIController AdminCopy;
     
-    public static void initializeList() throws Exception{
+    /**
+     * The intialization method called by Main Class to load Stored Data
+     */
+    public static void initializeList(){
         UserList = readData(storeDir,storeFile);
     }
     
+    /**
+     * Gets the UserList for all
+     * @return UserList
+     */
     public static ArrayList<User> printList(){
         return UserList;
     }
     
-     /**
+    /**
       * A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
       * If exist, then return false to this process, else add this T variable to the TargetList and return true
       * @param <T>
       * @param TargetList
       * @param some
-      * @return
+      * @return If the given variable exists in the TargetList in boolean format
       */
     public static <T> boolean addSome(ArrayList<T> TargetList, T some){
         for(int i=0;i<TargetList.size();i++){
@@ -46,14 +49,14 @@ public class Admin {
         TargetList.add(some);
         return true;
     }
-
+    
     /**
      * A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
      * If exist, then remove the specified T variable from the TargetList and return true, else return false
      * @param <T>
      * @param TargetList
      * @param some
-     * @return
+     * @return If the given variable exists in the TargetList in boolean format
      */
     public static <T> boolean deleteSome(ArrayList<T> TargetList, T some){
         for(int i=0;i<TargetList.size();i++){
@@ -66,38 +69,29 @@ public class Admin {
     }
     
     /**
-     * 
-     * @throws Exception
+     * The transfer method used to let other classes call the process of storing data to savefile
      */
-    public static void writeUser() throws Exception{
+    public static void writeUser(){
         writeData(storeDir,storeFile,UserList);
     }
-<<<<<<< HEAD
     
-    private static void writeData(String storeDir, String storeFile, ArrayList<User> al){
+    /**
+     * The method used to store data to savefile
+     * @param storeDir
+     * @param storeFile
+     * @param userlist
+     */
+    private static void writeData(String storeDir, String storeFile, ArrayList<User> userlist){
         try{
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
-            oos.writeObject(al);
+            oos.writeObject(userlist);
         } catch (Exception e){
             PrintErrorMessage(e);
         }
-=======
-
-    /**
-     * 
-     * @param storeDir
-     * @param storeFile
-     * @param al
-     * @throws IOException
-     */
-    private static void writeData(String storeDir, String storeFile, ArrayList<User> al) throws IOException{
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
-        oos.writeObject(al);
->>>>>>> a35fd621de5cbc9e4e132589af930331e45cf098
     }
     
     /**
-     * 
+     * The method used to read data from savefile
      * @param storeDir
      * @param storeFile
      * @return
@@ -135,21 +129,21 @@ public class Admin {
      * A method for converting arraylist of objects into a total string with all tostring values of each element of the arraylist, separated by "\n", for FXML TextArea using
      * ArrayList<T> -> String: "String1\nString2\n..."
      * @param <T>
-     * @param as
-     * @return
+     * @param arraylist
+     * @return A string containing specialized converted version of provided ArrayList
      */
-    public static <T> String ConvertArrayListtoString(ArrayList<T> as){
+    public static <T> String ConvertArrayListtoString(ArrayList<T> arraylist){
         String temp = "";
-        T something = as.get(0);
+        T something = arraylist.get(0);
         if(something instanceof String){
-            for(int i=0;i<as.size();i++){
-                temp+=as.get(i);
+            for(int i=0;i<arraylist.size();i++){
+                temp+=arraylist.get(i);
                 temp+="\n";
             }
         }
         else if(something instanceof User){
-            for(int i=0;i<as.size();i++){
-                temp+=as.get(i).toString();
+            for(int i=0;i<arraylist.size();i++){
+                temp+=arraylist.get(i).toString();
                 temp+="\n";
             }
         }
@@ -188,10 +182,10 @@ public class Admin {
     }
     
     /**
-     * 
+     * The general method used to create a fully captured new Photo
      * @param path
      * @param IfAbsolutePath
-     * @return
+     * @return EachPhoto
      */
     public static EachPhoto createNewPhoto(String path, boolean IfAbsolutePath){
         EachPhoto eachphoto = new EachPhoto(path);
@@ -218,19 +212,21 @@ public class Admin {
     }
     
     /**
-     * 
-     * @param c
-     * @return
+     * A method used to convert the Calendar data type into a specialized String format
+     * @param calendar
+     * @return Specialized Calendar Value in String format
      */
-    public static String ConvertCalendartoString(Calendar c){
-        return String.format("%04d-%02d-%02d %02d:%02d:%02d",c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1,c.get(Calendar.DAY_OF_MONTH),
-                c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),c.get(Calendar.SECOND));
+    public static String ConvertCalendartoString(Calendar calendar){
+        return String.format("%04d-%02d-%02d %02d:%02d:%02d",calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),calendar.get(Calendar.SECOND));
     }
-
+    
     /**
-     * 
+     * A method used to test if an input fits correct time format
+     * If fits, then return its transformed Calendar format
+     * If doesn't fit, then return null
      * @param input
-     * @return
+     * @return Transformed String Value in Calendar format
      */
     public static Calendar ifTimeFormatCorrect(String input){
         ArrayList<Integer> Formatted = new ArrayList<Integer>();
@@ -253,9 +249,9 @@ public class Admin {
     }
     
     /**
-     * 
+     * A method used to turn an Integer ArrayList to a Calendar data type
      * @param Formatted
-     * @return
+     * @return Transformed Integer ArrayList in Calendar type
      */
     public static Calendar createCalendarDate(ArrayList<Integer> Formatted){
         Calendar c = Calendar.getInstance();
@@ -265,25 +261,29 @@ public class Admin {
     }
     
     /**
-     * 
-     * @param p
+     * A method called after changes have done to a photo, to let all its copies accept those changes
+     * @param eachphoto
      */
-    public static void UpdateToAll(EachPhoto p){
+    public static void UpdateToAll(EachPhoto eachphoto){
         for(int i=0;i<UserList.size();i++){
             for(int j=0;j<UserList.get(i).getAlbums().size();j++){
                 for(int k=0;k<UserList.get(i).getAlbums().get(j).getContains().size();k++){
                     EachPhoto ep = UserList.get(i).getAlbums().get(j).getContains().get(k);
-                    if(ep.toString().equals(p.toString())){
-                        ep.setCaption(p.getCaption());
-                        ep.setTags(p.getTags());
+                    if(ep.toString().equals(eachphoto.toString())){
+                        ep.setCaption(eachphoto.getCaption());
+                        ep.setTags(eachphoto.getTags());
                     }
                 }
             }
         }
     }
     
-    public static void PrintErrorMessage(Exception e){
-        AdminCopy.ErrorMessageText.setText("Exception: "+e.toString());
+    /**
+     * A method used to create an ErrorMessage Window in Stage and print the Exception Message
+     * @param exception
+     */
+    public static void PrintErrorMessage(Exception exception){
+        AdminCopy.ErrorMessageText.setText("Exception: "+exception.toString());
         AdminCopy.windowTransfer(AdminCopy.Current, AdminCopy.ErrorMessageWindow,AdminCopy.getOperation(1));
     }
 }
