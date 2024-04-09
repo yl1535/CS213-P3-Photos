@@ -6,8 +6,11 @@ import java.util.Calendar;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-/*
+
+/**
  * The Main Class for Operation methods, note that this is not for user-admin
+ * @author Yue Luo
+ * @author Nicole Le
 */
 public class Admin {
     static final long serialVersionID = 1L;
@@ -23,9 +26,14 @@ public class Admin {
         return UserList;
     }
     
-    /** A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
-     *  If exist, then return false to this process, else add this T variable to the TargetList and return true
-     */
+     /**
+      * A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
+      * If exist, then return false to this process, else add this T variable to the TargetList and return true
+      * @param <T>
+      * @param TargetList
+      * @param some
+      * @return
+      */
     public static <T> boolean addSome(ArrayList<T> TargetList, T some){
         for(int i=0;i<TargetList.size();i++){
             if(TargetList.get(i).toString().equals(some.toString())) return false;
@@ -33,9 +41,14 @@ public class Admin {
         TargetList.add(some);
         return true;
     }
-    
-    /** A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
-     *  If exist, then remove the specified T variable from the TargetList and return true, else return false
+
+    /**
+     * A T method used to test if the given variable with type T exists in the TargetList, by using their toString() values to compare
+     * If exist, then remove the specified T variable from the TargetList and return true, else return false
+     * @param <T>
+     * @param TargetList
+     * @param some
+     * @return
      */
     public static <T> boolean deleteSome(ArrayList<T> TargetList, T some){
         for(int i=0;i<TargetList.size();i++){
@@ -47,15 +60,32 @@ public class Admin {
         return false;
     }
     
+    /**
+     * 
+     * @throws Exception
+     */
     public static void writeUser() throws Exception{
         writeData(storeDir,storeFile,UserList);
     }
-    
+
+    /**
+     * 
+     * @param storeDir
+     * @param storeFile
+     * @param al
+     * @throws IOException
+     */
     private static void writeData(String storeDir, String storeFile, ArrayList<User> al) throws IOException{
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir + File.separator + storeFile));
         oos.writeObject(al);
     }
     
+    /**
+     * 
+     * @param storeDir
+     * @param storeFile
+     * @return
+     */
     private static ArrayList<User> readData(String storeDir, String storeFile){
         ArrayList<User> users = new ArrayList<User>();
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(storeDir + File.separator + storeFile))){
@@ -85,8 +115,13 @@ public class Admin {
         return users;
     }
     
-    // A method for converting arraylist of objects into a total string with all tostring values of each element of the arraylist, separated by "\n", for FXML TextArea using
-    // ArrayList<T> -> String: "String1\nString2\n..."
+    /**
+     * A method for converting arraylist of objects into a total string with all tostring values of each element of the arraylist, separated by "\n", for FXML TextArea using
+     * ArrayList<T> -> String: "String1\nString2\n..."
+     * @param <T>
+     * @param as
+     * @return
+     */
     public static <T> String ConvertArrayListtoString(ArrayList<T> as){
         String temp = "";
         T something = as.get(0);
@@ -105,7 +140,9 @@ public class Admin {
         return temp;
     }
     
-    // The key method for dealing killing the application bypassing safely quit
+    /**
+     * The key method for dealing killing the application bypassing safely quit
+     */
     public static void SafelyQuit(){
         try{
             writeUser();
@@ -114,7 +151,10 @@ public class Admin {
         }
     }
     
-    // Initialize the savefile
+    /**
+     * Initialize the savefile
+     * @param users
+     */
     private static void initializeSaveFile(ArrayList<User> users){
         users.add(new User("admin"));
         User stock = new User("stock");
@@ -131,6 +171,12 @@ public class Admin {
         users.add(stock);
     }
     
+    /**
+     * 
+     * @param path
+     * @param IfAbsolutePath
+     * @return
+     */
     public static EachPhoto createNewPhoto(String path, boolean IfAbsolutePath){
         EachPhoto eachphoto = new EachPhoto(path);
         try{
@@ -155,11 +201,21 @@ public class Admin {
         return eachphoto;
     }
     
+    /**
+     * 
+     * @param c
+     * @return
+     */
     public static String ConvertCalendartoString(Calendar c){
         return String.format("%04d-%02d-%02d %02d:%02d:%02d",c.get(Calendar.YEAR),c.get(Calendar.MONTH)+1,c.get(Calendar.DAY_OF_MONTH),
                 c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),c.get(Calendar.SECOND));
     }
-    
+
+    /**
+     * 
+     * @param input
+     * @return
+     */
     public static Calendar ifTimeFormatCorrect(String input){
         ArrayList<Integer> Formatted = new ArrayList<Integer>();
         try{
@@ -180,6 +236,11 @@ public class Admin {
         }
     }
     
+    /**
+     * 
+     * @param Formatted
+     * @return
+     */
     public static Calendar createCalendarDate(ArrayList<Integer> Formatted){
         Calendar c = Calendar.getInstance();
         c.set(Formatted.get(0),Formatted.get(1),Formatted.get(2),Formatted.get(3),Formatted.get(4),Formatted.get(5));
@@ -187,6 +248,10 @@ public class Admin {
         return c;
     }
     
+    /**
+     * 
+     * @param p
+     */
     public static void UpdateToAll(EachPhoto p){
         for(int i=0;i<UserList.size();i++){
             for(int j=0;j<UserList.get(i).getAlbums().size();j++){
