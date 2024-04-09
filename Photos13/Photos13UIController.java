@@ -709,7 +709,7 @@ public class Photos13UIController {
     }
     
     /**
-     * 
+     * Implements the cell click event. 
      * @param cellContainer
      * @param currentindex
      */
@@ -734,10 +734,14 @@ public class Photos13UIController {
         });
     }
     
-    /**  A method used to control the button availables in album page
-     *   true -> Add & Search button becomes available, other buttons become not available
-     *   false -> Add & Search button becomes not available, other buttons become available
-     */
+    
+
+     /**
+      *  A method used to control the button availables in album page
+      *  true -> Add & Search button becomes available, other buttons become not available
+      *  false -> Add & Search button becomes not available, other buttons become available
+      * @param mode
+      */
     public void setUAPButton(boolean mode){
         UAPb1.setDisable(!mode);
         UAPb2.setDisable(mode);
@@ -746,10 +750,12 @@ public class Photos13UIController {
         UAPb6.setDisable(!mode);
     }
     
-    /** A method used to control the button availables in photo page
-     *  1 -> Not selected mode, Add, Go Through and Search buttons become available, other buttons become not available
-     *  2 -> Selected mode, Add, Go Through and Search buttons become not available, other buttons become available
-     *  3 -> Special: Search mode, all buttons except Return become unavailable
+    /**
+     * A method used to control the button availables in photo page
+     * 1 -> Not selected mode, Add, Go Through and Search buttons become available, other buttons become not available
+     * 2 -> Selected mode, Add, Go Through and Search buttons become not available, other buttons become available
+     * 3 -> Special: Search mode, all buttons except Return become unavailable
+     * @param mode
      */
     public void setAPButton(int mode){
         switch(mode){
@@ -792,6 +798,10 @@ public class Photos13UIController {
         }
     }
     
+    /**
+     * Set search button depending on the desired mode.
+     * @param mode
+     */
     public void setSearchButton(boolean mode){
         SPb1.setDisable(!mode);
         SPb2.setDisable(mode);
@@ -922,8 +932,8 @@ public class Photos13UIController {
         if(waitedOperation == -1) windowTransfer(Current,ErrorMessageWindow,Operations.OpenError);
     }
     
-    /** A universal method used to operate set functions after closing the TargetAlbumChooser window
-     * 
+    /** 
+     * A universal method used to operate set functions after closing the TargetAlbumChooser window
      * @param ifCopy 
      */
     public void ChooseAlbumOperation(boolean ifCopy){
@@ -948,11 +958,13 @@ public class Photos13UIController {
         windowTransfer(AlbumPhotoPage,ErrorMessageWindow,Operations.OpenError);
     }
     
-    /** A universal method used to operate set functions after closing the TwoButton window
-     *  1 -> Initialize GoThrough window with direction
-     *  2 -> Search by Date or Search by Tags
-     *  3 -> Search by Single Tag or Search by Two Tags
-     */
+     /**
+      * A universal method used to operate set functions after closing the TwoButton window
+      * 1 -> Initialize GoThrough window with direction
+      * 2 -> Search by Date or Search by Tags
+      * 3 -> Search by Single Tag or Search by Two Tags
+      * @param leftbutton
+      */
     public void TwoButtonsOperation(boolean leftbutton){
         switch(twoButtonsOperation){
             case 1:
@@ -1014,10 +1026,12 @@ public class Photos13UIController {
                 break;
         }
     }
-    
-    /** A method called after a change to a photo's caption/tags has been made
-     *  The method goes through every album in each user and replace copies of Photos with same path with the provided Photo data
-     */
+
+     /**
+      * A method called after a change to a photo's caption/tags has been made
+      * The method goes through every album in each user and replace copies of Photos with same path with the provided Photo data
+      * @param p
+      */
     public void UpdatePhotoData(EachPhoto p){
         for(int i=0;i<Admin.UserList.size();i++){
             ArrayList<Album> albums = Admin.UserList.get(i).getAlbums();
@@ -1034,10 +1048,9 @@ public class Photos13UIController {
         }
     }
     
-    /** A specific method used to update the GoThrough Photo imageView
-     * 
+    /**
+     *  A specific method used to update the GoThrough Photo imageView
      */
-    
     public void UpdateGoThroughPhoto(){
         GoThrough.getChildren().clear();
         EachPhoto ep = CurrentAlbum.getContains().get(currentGoThroughindex);
@@ -1052,6 +1065,11 @@ public class Photos13UIController {
         GoThrough.add(GoThroughCurrent,0,0);
     }
     
+    /**
+     * Set up the file selector.
+     * @param primaryStage
+     * @return
+     */
     public String setupFileSelector(Stage primaryStage){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Photo You want to Add to Album "+CurrentAlbum.getName());
@@ -1060,7 +1078,13 @@ public class Photos13UIController {
         File file = fileChooser.showOpenDialog(null);
         return file.getAbsolutePath();
     }
-    
+
+
+    /**
+     * Depending on the desired operation, excute a window change. 
+     * @param type
+     * @return
+     */
     public Operations getOperation(int type){
         switch(type){
             case 1:
