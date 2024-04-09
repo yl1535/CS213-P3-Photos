@@ -6,6 +6,11 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import photos13.Admin;
 
+/**
+ * The controller for the Photos13 UI
+ * @author Yue Luo
+ * @author Nicole Le
+ */
 public class Photos13UIController {
     public static boolean ErrorWindowAppear = false;
     
@@ -15,6 +20,10 @@ public class Photos13UIController {
     @FXML Pane ErrorMessageWindow;
     @FXML TextArea ErrorMessageText;
     
+    /**
+     * Return appropriate error messages depending on user findability
+     * @param e
+     */
     public void convert(ActionEvent e){
         Button temp = (Button)e.getSource();
         if(temp == b1 && !ErrorWindowAppear){
