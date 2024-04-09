@@ -120,22 +120,27 @@ public class Admin {
         User stock = new User("stock");
         ArrayList<Album> albums = new ArrayList<Album>();
         ArrayList<EachPhoto> stockphotos = new ArrayList<EachPhoto>();
-        stockphotos.add(createNewPhoto("Photos13/data/angry-cat-meme.gif"));
-        stockphotos.add(createNewPhoto("Photos13/data/FCP.jpeg"));
-        stockphotos.add(createNewPhoto("Photos13/data/huh_cat.jpeg"));
-        stockphotos.add(createNewPhoto("Photos13/data/KNOWYOURMEME-sad-cat-crying-1120.jpeg"));
-        stockphotos.add(createNewPhoto("Photos13/data/Melvin.jpeg"));
+        stockphotos.add(createNewPhoto("/Photos13/data/angry-cat-meme.gif",false));
+        stockphotos.add(createNewPhoto("/Photos13/data/FCP.jpeg",false));
+        stockphotos.add(createNewPhoto("/Photos13/data/huh_cat.jpeg",false));
+        stockphotos.add(createNewPhoto("/Photos13/data/KNOWYOURMEME-sad-cat-crying-1120.jpeg",false));
+        stockphotos.add(createNewPhoto("/Photos13/data/Melvin.jpeg",false));
         Album album = new Album(stockphotos, "stock");
         albums.add(album);
         stock.setAlbums(albums);
         users.add(stock);
     }
     
-    public static EachPhoto createNewPhoto(String path){
+    public static EachPhoto createNewPhoto(String path, boolean IfAbsolutePath){
         EachPhoto eachphoto = new EachPhoto(path);
-        path = path.substring(9);
-        URL completepath = Admin.class.getResource(path);
         try{
+            URL completepath;
+            if(!IfAbsolutePath){
+                path = path.substring(10);
+                completepath = Admin.class.getResource(path);
+            }
+            else completepath = new File(path).toURI().toURL();
+            eachphoto.setPath(completepath.toString());
             File file = new File(completepath.toURI());
             long LastModifiedTime = file.lastModified();
             Calendar calendar = Calendar.getInstance();
@@ -183,8 +188,16 @@ public class Admin {
     }
     
     public static void UpdateToAll(EachPhoto p){
-        //TODO: Update the current photo's data to all copies
-            //TODO: search for all and find a place where "same pic" detection isn't correct, since using two different file path storings
-                //Should be addSome and deleteSome's sub to photos
+        for(int i=0;i<UserList.size();i++){
+            for(int j=0;j<UserList.get(i).getAlbums().size();j++){
+                for(int k=0;k<UserList.get(i).getAlbums().get(j).getContains().size();k++){
+                    EachPhoto ep = UserList.get(i).getAlbums().get(j).getContains().get(k);
+                    if(ep.toString().equals(p.toString())){
+                        ep.setCaption(p.getCaption());
+                        ep.setTags(p.getTags());
+                    }
+                }
+            }
+        }
     }
 }

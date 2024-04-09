@@ -9,7 +9,9 @@ import javafx.scene.image.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -69,6 +71,7 @@ public class Photos13UIController {
     @FXML Pane SearchResultPage;
     @FXML Pane TagInputer1;
     @FXML Pane TagInputer2;
+    @FXML Pane AddPhotoPage;
     @FXML GridPane AlbumGridPane;
     @FXML GridPane AlbumPhotoGridPane;
     @FXML GridPane GoThrough;
@@ -229,7 +232,19 @@ public class Photos13UIController {
             ReadInputOperations();
         }
         else if(temp == APb1){      //Add New Photo to Album
-            
+            AddPhotoPage.setDisable(false);
+            String Path = setupFileSelector(null);
+            EachPhoto ep = Admin.createNewPhoto(Path,true);
+            ArrayList<EachPhoto> eachphotos = CurrentAlbum.getContains();
+            if(Admin.addSome(eachphotos, ep)){
+                CurrentAlbum.setContains(eachphotos);
+                Admin.writeUser();
+                InitializeAlbumPhotoPage(CurrentAlbum);
+                ErrorMessageText.setText("Selected Photo has successfully added to the album.");
+            }
+            else ErrorMessageText.setText("Error03:Selected Photo already has a copy in current album.");
+            AddPhotoPage.setDisable(true);
+            windowTransfer(Current,ErrorMessageWindow,Operations.OpenError);
         }
         else if(temp == APb2){      //Delete Selected Photo from Album
             ArrayList<EachPhoto> eachphotos = CurrentAlbum.getContains();
@@ -249,7 +264,19 @@ public class Photos13UIController {
         }
         else if(temp == APb4 || temp == SPb2){      //Display the Selected Photo
             EachPhoto ep = CurrentAlbum.getContains().get(selectedPhotoindex);
-            Image image = new Image(ep.getPath());
+            File file = new File(ep.getPath());
+            String formattedpath = "";
+            if(!file.exists()){
+                formattedpath = ep.getPath();
+            }
+            else{
+                try{
+                    formattedpath = file.toURI().toURL().toString();
+                } catch(Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+            Image image = new Image(formattedpath);
             ImageView imageView = new ImageView(image);
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(1004);
@@ -510,7 +537,19 @@ public class Photos13UIController {
         AlbumPhotoGridPane.setPrefSize(480,160*Photoheight);
         for(int i=0;i<PhotoSize;i++){
             EachPhoto p = a.getContains().get(i);
-            Image image = new Image(p.getPath());
+            File file = new File(p.getPath());
+            String formattedpath = "";
+            if(!file.exists()){
+                formattedpath = p.getPath();
+            }
+            else{
+                try{
+                    formattedpath = file.toURI().toURL().toString();
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+            Image image = new Image(formattedpath);
             ImageView iv = new ImageView(image);
             iv.setPreserveRatio(true);
             iv.setFitWidth(100);
@@ -553,7 +592,19 @@ public class Photos13UIController {
         SearchResultGridPane.setPrefSize(480,160*Photoheight);
         for(int i=0;i<PhotoSize;i++){
             EachPhoto p = a.getContains().get(i);
-            Image image = new Image(p.getPath());
+            File file = new File(p.getPath());
+            String formattedpath = "";
+            if(!file.exists()){
+                formattedpath = p.getPath();
+            }
+            else{
+                try{
+                    formattedpath = file.toURI().toURL().toString();
+                } catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+            Image image = new Image(formattedpath);
             ImageView iv = new ImageView(image);
             iv.setPreserveRatio(true);
             iv.setFitWidth(100);
@@ -940,5 +991,14 @@ public class Photos13UIController {
         GoThroughCurrent.setPrefSize(600,400);
         GoThroughCurrent.setStyle("-fx-background-color: white;");
         GoThrough.add(GoThroughCurrent,0,0);
+    }
+    
+    public String setupFileSelector(Stage primaryStage){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Photo You want to Add to Album "+CurrentAlbum.getName());
+        FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files","*.bmp","*.gif","*.jpeg","*.png");
+        fileChooser.getExtensionFilters().add(imageFilter);
+        File file = fileChooser.showOpenDialog(null);
+        return file.getAbsolutePath();
     }
 }

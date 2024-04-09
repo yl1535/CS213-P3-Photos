@@ -81,6 +81,7 @@
             <Button fx:id="APb9" layoutX="504.97949215" layoutY="302.0" mnemonicParsing="false" onAction="#convert" text="Go Through" />
             <Button fx:id="APb10" layoutX="519.02148435" layoutY="362.0" mnemonicParsing="false" onAction="#convert" text="Return" />
          </children></Pane>
+      <Pane fx:id="AddPhotoPage" disable="true" prefHeight="289.0" prefWidth="418.0" visible="false" />
       <Pane fx:id="SearchResultPage" disable="true" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #badeff;" visible="false">
          <children>
             <ScrollPane prefHeight="400.0" prefWidth="495.0">

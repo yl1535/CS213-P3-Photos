@@ -69,5 +69,9 @@ public class EachPhoto implements Serializable{
     public void setDate(Calendar c){
         this.Date = c;
     }
+    
+    public String toString(){
+        return PhotoPath;
+    }
 
 }

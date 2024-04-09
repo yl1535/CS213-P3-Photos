@@ -36,7 +36,7 @@ public class Album implements Serializable{
     }
     
     public String getEarliest(){
-        if(Contains == null) return null;
+        if(Contains.size() == 0) return null;
         else{
             Calendar earliest = Contains.get(0).getDate();
             for(int i=1;i<Contains.size();i++){
@@ -47,7 +47,7 @@ public class Album implements Serializable{
     }
     
     public String getLatest(){
-        if(Contains == null) return null;
+        if(Contains.size() == 0) return null;
         else{
             Calendar latest = Contains.get(0).getDate();
             for(int i=1;i<Contains.size();i++){
