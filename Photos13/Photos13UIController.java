@@ -15,6 +15,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+/**
+ * The controller for the entirety of the UI
+ * @author Yue Luo
+ * @author Nicole Le
+ */
 public class Photos13UIController {
     private enum Operations{
         NewWindow,  //Open a new window, while the user can operate on both the current page and the new window
@@ -111,6 +116,10 @@ public class Photos13UIController {
     boolean ifTACOperationisCopy = false; //A global variable for storing if the move photo process is copy
     boolean ifTagPipeisAND = false; //A global variable for storing if Tag Pipe is AND using the double tag search mode
     
+    /**
+     * Identifying the appropriate action after a button is pressed
+     * @param e
+     */
     public void convert(ActionEvent e){
         Button temp = (Button)e.getSource();
         if(temp == b3){ //Safely quit Button
@@ -505,7 +514,13 @@ public class Photos13UIController {
         }
         
     }
-    
+
+    /**
+     * Handle window transfers (e.g. opening a new window, closing a window, new scene, opening error message, closing error message)
+     * @param p1
+     * @param p2
+     * @param o
+     */
     public void windowTransfer(Pane p1, Pane p2, Operations o){
         switch(o){
             case NewWindow:
@@ -535,6 +550,10 @@ public class Photos13UIController {
         }
     }
     
+    /**
+     * Initilize the album page. Note that this page is distinct from individual photo pages.
+     * @param u
+     */
     public void InitializeAlbumPage(User u){
         AlbumGridPane.getChildren().clear();
         LoggedUser = u;
@@ -552,6 +571,10 @@ public class Photos13UIController {
         }
     }
     
+    /**
+     * Initialize the photo page. Note that this page is distinct from the general album page. 
+     * @param a
+     */
     public void InitializeAlbumPhotoPage(Album a){
         AlbumPhotoGridPane.getChildren().clear();
         CurrentAlbum = a;
@@ -607,6 +630,10 @@ public class Photos13UIController {
         }
     }
     
+    /**
+     * Initialize the search result page. This a distinct page than the individual albums and photos pages. 
+     * @param a
+     */
     public void InitializeSearchResultPage(Album a){
         SearchResultGridPane.getChildren().clear();
         CurrentAlbum = a;
@@ -662,6 +689,11 @@ public class Photos13UIController {
         }
     }
     
+    /**
+     * Initialize the album chooser page. Note that this page is distinct than the page of an individual album.
+     * The album chooser page displays the albums of a particular user. 
+     * @param u
+     */
     public void InitializeAlbumChooserPage(User u){
         TargetAlbumGridPane.getChildren().clear();
         ArrayList<Album> albums = u.getAlbums();
@@ -676,6 +708,11 @@ public class Photos13UIController {
         }
     }
     
+    /**
+     * 
+     * @param cellContainer
+     * @param currentindex
+     */
     public void setCellClickEvent(Pane cellContainer, int currentindex){
         cellContainer.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-background-color: white;");
         cellContainer.setOnMouseClicked(event -> {
