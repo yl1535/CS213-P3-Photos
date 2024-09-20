@@ -24,8 +24,8 @@ public class Photos extends Application{
         // create FXML loader
 	FXMLLoader loader = new FXMLLoader();
 	loader.setLocation(getClass().getResource("/Photos13/Photos13UI.fxml"));   //requires path change when doing final correction on file path
-		
-	// load fmxl, connect root
+	
+    // load fmxl, connect root
 	Pane root = (Pane)loader.load();
         
 	// set scene to root
